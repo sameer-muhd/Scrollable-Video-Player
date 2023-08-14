@@ -10,7 +10,6 @@
 		465BBD1C2A8A07C000700683 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465BBD1B2A8A07C000700683 /* AppDelegate.swift */; };
 		465BBD1E2A8A07C000700683 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465BBD1D2A8A07C000700683 /* SceneDelegate.swift */; };
 		465BBD202A8A07C000700683 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465BBD1F2A8A07C000700683 /* ViewController.swift */; };
-		465BBD232A8A07C000700683 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 465BBD212A8A07C000700683 /* Main.storyboard */; };
 		465BBD262A8A07C000700683 /* Scrollable_Video_Player.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 465BBD242A8A07C000700683 /* Scrollable_Video_Player.xcdatamodeld */; };
 		465BBD282A8A07C100700683 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 465BBD272A8A07C100700683 /* Assets.xcassets */; };
 		465BBD2B2A8A07C100700683 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 465BBD292A8A07C100700683 /* LaunchScreen.storyboard */; };
@@ -41,7 +40,6 @@
 		465BBD1B2A8A07C000700683 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		465BBD1D2A8A07C000700683 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		465BBD1F2A8A07C000700683 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		465BBD222A8A07C000700683 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		465BBD252A8A07C000700683 /* Scrollable_Video_Player.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Scrollable_Video_Player.xcdatamodel; sourceTree = "<group>"; };
 		465BBD272A8A07C100700683 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		465BBD2A2A8A07C100700683 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -104,7 +102,6 @@
 				465BBD1B2A8A07C000700683 /* AppDelegate.swift */,
 				465BBD1D2A8A07C000700683 /* SceneDelegate.swift */,
 				465BBD1F2A8A07C000700683 /* ViewController.swift */,
-				465BBD212A8A07C000700683 /* Main.storyboard */,
 				465BBD272A8A07C100700683 /* Assets.xcassets */,
 				465BBD292A8A07C100700683 /* LaunchScreen.storyboard */,
 				465BBD2C2A8A07C100700683 /* Info.plist */,
@@ -236,7 +233,6 @@
 			files = (
 				465BBD2B2A8A07C100700683 /* LaunchScreen.storyboard in Resources */,
 				465BBD282A8A07C100700683 /* Assets.xcassets in Resources */,
-				465BBD232A8A07C000700683 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,14 +297,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		465BBD212A8A07C000700683 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				465BBD222A8A07C000700683 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		465BBD292A8A07C100700683 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -445,7 +433,6 @@
 				INFOPLIST_FILE = "Scrollable-Video-Player/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -472,7 +459,6 @@
 				INFOPLIST_FILE = "Scrollable-Video-Player/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
