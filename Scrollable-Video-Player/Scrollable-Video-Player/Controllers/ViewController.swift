@@ -107,4 +107,3 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
         return CGSize(width: itemWidth, height: itemHeight)
     }
 }
-

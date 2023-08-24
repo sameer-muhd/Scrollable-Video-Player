@@ -30,6 +30,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         let watchBtn = UIButton(type: .custom)
         
         watchBtn.setImage(UIImage(named: "playButton"), for: .normal)
+        watchBtn.setImage(UIImage(named: "playButtonTapped"), for: .highlighted)
         watchBtn.imageView?.contentMode = .scaleToFill
         watchBtn.translatesAutoresizingMaskIntoConstraints = false
         
@@ -51,6 +52,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private var addToPlaylistButton: UIButton = {
         let addBtn = UIButton(type: .custom)
         addBtn.setImage(UIImage(named: "addToList"), for: .normal)
+        addBtn.setImage(UIImage(named: "addToListTapped"), for: .highlighted)
         addBtn.imageView?.contentMode = .scaleToFill
         addBtn.translatesAutoresizingMaskIntoConstraints = false
 
@@ -72,6 +74,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private var shareButton: UIButton = {
         let shareBtn = UIButton(type: .custom)
         shareBtn.setImage(UIImage(named: "shareButton"), for: .normal)
+        shareBtn.setImage(UIImage(named: "shareButtonTapped"), for: .highlighted)
         shareBtn.imageView?.contentMode = .scaleToFill
         shareBtn.translatesAutoresizingMaskIntoConstraints = false
 
@@ -109,9 +112,9 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     private var subtitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Spiderman arrives to rescue the town from Venom."
-        label.numberOfLines = 2
-        label.font = UIFont.notoSans(size: 14, weight: .bold)
+        label.text = "Spiderman: Homecoming • Action • U/A 7+"
+        label.numberOfLines = 1
+        label.font = UIFont.notoSans(size: 11, weight: .regular)
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -124,6 +127,25 @@ class VideoCollectionViewCell: UICollectionViewCell {
         return container
     }()
     
+    private var backButton: UIButton = {
+        let backBtn = UIButton(type: .custom)
+        backBtn.setImage(UIImage(named: "ChevronLeft"), for: .normal)
+        backBtn.imageView?.contentMode = .scaleToFill
+        backBtn.translatesAutoresizingMaskIntoConstraints = false
+
+        return backBtn
+    }()
+    
+    private var volumeButton: UIButton = {
+        let volumeBtn = UIButton(type: .custom)
+        volumeBtn.setImage(UIImage(named: "VolumeLoud"), for: .normal)
+        volumeBtn.imageView?.contentMode = .scaleToFill
+        volumeBtn.adjustsImageWhenHighlighted = false
+        volumeBtn.translatesAutoresizingMaskIntoConstraints = false
+
+        return volumeBtn
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -132,6 +154,8 @@ class VideoCollectionViewCell: UICollectionViewCell {
         
         contentView.addSubview(optionsContainer)
         contentView.addSubview(textContainer)
+        contentView.addSubview(backButton)
+        contentView.addSubview(volumeButton)
         
         optionsContainer.addSubview(watchButton)
         optionsContainer.addSubview(watchButtonLabel)
@@ -141,6 +165,9 @@ class VideoCollectionViewCell: UICollectionViewCell {
         optionsContainer.addSubview(shareButtonLabel)
         
         textContainer.addSubview(titleLabel)
+        textContainer.addSubview(subtitleLabel)
+        
+        volumeButton.addTarget(self, action: #selector(volumeButtonTapped), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -155,6 +182,18 @@ class VideoCollectionViewCell: UICollectionViewCell {
         bgImage.frame = contentView.bounds
         
         NSLayoutConstraint.activate([
+            // Back button constraints
+            backButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            backButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            backButton.widthAnchor.constraint(equalToConstant: 30),
+            backButton.heightAnchor.constraint(equalToConstant: 30),
+            
+            // Volume Button constraints
+            volumeButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            volumeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            volumeButton.widthAnchor.constraint(equalToConstant: 30),
+            volumeButton.heightAnchor.constraint(equalToConstant: 30),
+            
             // Options Container constraints
             optionsContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
             optionsContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
@@ -200,14 +239,31 @@ class VideoCollectionViewCell: UICollectionViewCell {
             // Text cotainer constraints
             textContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             textContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            textContainer.trailingAnchor.constraint(greaterThanOrEqualTo: optionsContainer.leadingAnchor, constant: 20),
+            textContainer.trailingAnchor.constraint(equalTo: optionsContainer.leadingAnchor, constant: 24),
             textContainer.heightAnchor.constraint(equalToConstant: 102),
             
             // Title label constraints
-            titleLabel.topAnchor.constraint(equalTo: textContainer.topAnchor, constant: 24),
+            titleLabel.topAnchor.constraint(equalTo: textContainer.topAnchor, constant: 16),
             titleLabel.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor, constant: 24),
-            titleLabel.widthAnchor.constraint(equalToConstant: 262),
+            titleLabel.widthAnchor.constraint(equalTo: textContainer.widthAnchor, multiplier: 1.0),
             titleLabel.heightAnchor.constraint(equalToConstant: 42),
+            
+            // Subtitle label constraints
+            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 0),
+            subtitleLabel.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor, constant: 24),
+            subtitleLabel.widthAnchor.constraint(equalTo: textContainer.widthAnchor, multiplier: 1.0),
+            subtitleLabel.heightAnchor.constraint(equalToConstant: 16),
         ])
+    }
+    
+    @objc func volumeButtonTapped() {
+        // Check the current image of the button
+        if volumeButton.currentImage == UIImage(named: "VolumeLoud") {
+            // Change the image to a different image
+            volumeButton.setImage(UIImage(named: "VolumeMute"), for: .normal)
+        } else {
+            // Change the image back to the original image
+            volumeButton.setImage(UIImage(named: "VolumeLoud"), for: .normal)
+        }
     }
 }
