@@ -184,14 +184,28 @@ class VideoCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        addBackgroundComponents()
+        addOptionsComponents()
+        addTextComponents()
+        addTopComponents()
+        
+        addVolumeButtonAction()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func addBackgroundComponents() {
         contentView.addSubview(bgImage)
         contentView.layer.addSublayer(gradientLayer)
         
-        contentView.addSubview(optionsContainer)
-        contentView.addSubview(textContainer)
-        contentView.addSubview(backButton)
-        contentView.addSubview(volumeButton)
-        
+        gradientLayer.position = contentView.center
+        bgImage.frame = contentView.bounds
+        gradientLayer.frame = contentView.bounds
+    }
+    
+    private func addOptionsComponents() {
         optionsContainer.addSubview(watchButton)
         optionsContainer.addSubview(watchButtonLabel)
         optionsContainer.addSubview(addToPlaylistButton)
@@ -199,36 +213,9 @@ class VideoCollectionViewCell: UICollectionViewCell {
         optionsContainer.addSubview(shareButton)
         optionsContainer.addSubview(shareButtonLabel)
         
-        textContainer.addSubview(titleLabel)
-        textContainer.addSubview(subtitleLabel)
-        
-        volumeButton.addTarget(self, action: #selector(volumeButtonTapped), for: .touchUpInside)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        gradientLayer.frame = contentView.bounds
-        gradientLayer.position = contentView.center
-        bgImage.frame = contentView.bounds
+        contentView.addSubview(optionsContainer)
         
         NSLayoutConstraint.activate([
-            // Back button constraints
-            backButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            backButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            backButton.widthAnchor.constraint(equalToConstant: 30),
-            backButton.heightAnchor.constraint(equalToConstant: 30),
-            
-            // Volume Button constraints
-            volumeButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            volumeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            volumeButton.widthAnchor.constraint(equalToConstant: 30),
-            volumeButton.heightAnchor.constraint(equalToConstant: 30),
-            
             // Options Container constraints
             optionsContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
             optionsContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
@@ -269,8 +256,17 @@ class VideoCollectionViewCell: UICollectionViewCell {
             shareButtonLabel.topAnchor.constraint(equalTo: shareButton.bottomAnchor),
             shareButtonLabel.centerXAnchor.constraint(equalTo: optionsContainer.centerXAnchor),
             shareButtonLabel.widthAnchor.constraint(equalToConstant: 40),
-            shareButtonLabel.heightAnchor.constraint(equalToConstant: 20),
-            
+            shareButtonLabel.heightAnchor.constraint(equalToConstant: 20)
+        ])
+    }
+    
+    private func addTextComponents() {
+        textContainer.addSubview(titleLabel)
+        textContainer.addSubview(subtitleLabel)
+        
+        contentView.addSubview(textContainer)
+        
+        NSLayoutConstraint.activate([
             // Text cotainer constraints
             textContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             textContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -287,11 +283,34 @@ class VideoCollectionViewCell: UICollectionViewCell {
             subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 0),
             subtitleLabel.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor, constant: 24),
             subtitleLabel.widthAnchor.constraint(equalTo: textContainer.widthAnchor, multiplier: 1.0),
-            subtitleLabel.heightAnchor.constraint(equalToConstant: 16),
+            subtitleLabel.heightAnchor.constraint(equalToConstant: 16)
         ])
     }
     
-    @objc func volumeButtonTapped() {
+    private func addTopComponents() {
+        contentView.addSubview(backButton)
+        contentView.addSubview(volumeButton)
+        
+        NSLayoutConstraint.activate([
+            // Back button constraints
+            backButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            backButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            backButton.widthAnchor.constraint(equalToConstant: 30),
+            backButton.heightAnchor.constraint(equalToConstant: 30),
+            
+            // Volume Button constraints
+            volumeButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            volumeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            volumeButton.widthAnchor.constraint(equalToConstant: 30),
+            volumeButton.heightAnchor.constraint(equalToConstant: 30),
+        ])
+    }
+    
+    private func addVolumeButtonAction() {
+        volumeButton.addTarget(self, action: #selector(volumeButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func volumeButtonTapped() {
         if volumeButton.currentImage == UIImage(named: volumeLoudImg) {
             volumeButton.setImage(UIImage(named: volumeMuteImg), for: .normal)
         } else {
