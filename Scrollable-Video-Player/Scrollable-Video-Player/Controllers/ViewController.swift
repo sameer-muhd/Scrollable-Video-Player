@@ -7,19 +7,12 @@
 
 import UIKit
 
+// Constraints values declared as constants
+let minimumCellSpacing = CGFloat(0.0)
+let topBarHeight = CGFloat(50.0)
+let bottomBarHeight = CGFloat(56.0)
+
 class ViewController: UIViewController {
-    private let collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .surfacePrimary
-        
-        // Register cell class or nib here
-        collectionView.register(VideoCollectionViewCell.self, forCellWithReuseIdentifier: "VideoCell")
-        
-        return collectionView
-    }()
-    
     private let topBar: UIView = {
         let view = UIView()
         view.backgroundColor = .surfacePrimary
@@ -34,36 +27,42 @@ class ViewController: UIViewController {
         return view
     }()
     
+    private let collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = minimumCellSpacing
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .surfacePrimary
+        collectionView.isPagingEnabled = true
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        collectionView.register(VideoCollectionViewCell.self, forCellWithReuseIdentifier: "VideoCell")
+        
+        return collectionView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         
-        setupCollectionView()
         setupTopBar()
         setupBottomBar()
+        setupCollectionView()
     }
     
     private func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
-        // Configure collection view layout and other settings
-        
-        // Add the collection view as a subview and set its constraints
+
         view.addSubview(collectionView)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+            collectionView.topAnchor.constraint(equalTo: topBar.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -56)
+            collectionView.bottomAnchor.constraint(equalTo: bottomBar.topAnchor)
         ])
-        
-        // Set up paging behavior and horizontal scrolling
-        collectionView.isPagingEnabled = true
-        collectionView.showsVerticalScrollIndicator = false // Hide the horizontal scroll indicator
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.minimumLineSpacing = 0  // Set this to control the spacing between cells
-        }
     }
     
     private func setupTopBar() {
@@ -73,7 +72,7 @@ class ViewController: UIViewController {
             topBar.topAnchor.constraint(equalTo: view.topAnchor),
             topBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            topBar.bottomAnchor.constraint(equalTo: collectionView.topAnchor)
+            topBar.heightAnchor.constraint(equalToConstant: topBarHeight)
         ])
     }
     
@@ -81,7 +80,7 @@ class ViewController: UIViewController {
         view.addSubview(bottomBar)
         
         NSLayoutConstraint.activate([
-            bottomBar.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
+            bottomBar.heightAnchor.constraint(equalToConstant: bottomBarHeight),
             bottomBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             bottomBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             bottomBar.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -91,13 +90,12 @@ class ViewController: UIViewController {
 
 extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return 5
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        // Dequeue and configure your collection view cell here
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCell", for: indexPath)
-        // Configure the cell's UI elements (e.g., buttons)
+        
         return cell
     }
     
