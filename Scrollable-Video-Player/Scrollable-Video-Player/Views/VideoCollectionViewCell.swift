@@ -7,6 +7,17 @@
 
 import UIKit
 
+// Image assets declared as constants
+let playButtonImg = "playButton"
+let playButtonTappedImg = "playButtonTapped"
+let addToListImg = "addToList"
+let addToListTappedImg = "addToListTapped"
+let shareButtonImg = "shareButton"
+let shareButtonTappedImg = "shareButtonTapped"
+let backButtonImg = "ChevronLeft"
+let volumeLoudImg = "VolumeLoud"
+let volumeMuteImg = "VolumeMute"
+
 class VideoCollectionViewCell: UICollectionViewCell {
     private let bgImage: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "TomHolland"))
@@ -29,8 +40,8 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private var watchButton: UIButton = {
         let watchBtn = UIButton(type: .custom)
         
-        watchBtn.setImage(UIImage(named: "playButton"), for: .normal)
-        watchBtn.setImage(UIImage(named: "playButtonTapped"), for: .highlighted)
+        watchBtn.setImage(UIImage(named: playButtonImg), for: .normal)
+        watchBtn.setImage(UIImage(named: playButtonTappedImg), for: .highlighted)
         watchBtn.imageView?.contentMode = .scaleToFill
         watchBtn.translatesAutoresizingMaskIntoConstraints = false
         
@@ -51,8 +62,8 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     private var addToPlaylistButton: UIButton = {
         let addBtn = UIButton(type: .custom)
-        addBtn.setImage(UIImage(named: "addToList"), for: .normal)
-        addBtn.setImage(UIImage(named: "addToListTapped"), for: .highlighted)
+        addBtn.setImage(UIImage(named: addToListImg), for: .normal)
+        addBtn.setImage(UIImage(named: addToListTappedImg), for: .highlighted)
         addBtn.imageView?.contentMode = .scaleToFill
         addBtn.translatesAutoresizingMaskIntoConstraints = false
         
@@ -73,8 +84,8 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     private var shareButton: UIButton = {
         let shareBtn = UIButton(type: .custom)
-        shareBtn.setImage(UIImage(named: "shareButton"), for: .normal)
-        shareBtn.setImage(UIImage(named: "shareButtonTapped"), for: .highlighted)
+        shareBtn.setImage(UIImage(named: shareButtonImg), for: .normal)
+        shareBtn.setImage(UIImage(named: shareButtonTappedImg), for: .highlighted)
         shareBtn.imageView?.contentMode = .scaleToFill
         shareBtn.translatesAutoresizingMaskIntoConstraints = false
         
@@ -131,7 +142,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     private var backButton: UIButton = {
         let backBtn = UIButton(type: .custom)
-        backBtn.setImage(UIImage(named: "ChevronLeft"), for: .normal)
+        backBtn.setImage(UIImage(named: backButtonImg), for: .normal)
         backBtn.imageView?.contentMode = .scaleToFill
         backBtn.translatesAutoresizingMaskIntoConstraints = false
         
@@ -140,7 +151,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     private var volumeButton: UIButton = {
         let volumeBtn = UIButton(type: .custom)
-        volumeBtn.setImage(UIImage(named: "VolumeLoud"), for: .normal)
+        volumeBtn.setImage(UIImage(named: volumeLoudImg), for: .normal)
         volumeBtn.imageView?.contentMode = .scaleToFill
         volumeBtn.adjustsImageWhenHighlighted = false
         volumeBtn.translatesAutoresizingMaskIntoConstraints = false
@@ -259,13 +270,10 @@ class VideoCollectionViewCell: UICollectionViewCell {
     }
     
     @objc func volumeButtonTapped() {
-        // Check the current image of the button
-        if volumeButton.currentImage == UIImage(named: "VolumeLoud") {
-            // Change the image to a different image
-            volumeButton.setImage(UIImage(named: "VolumeMute"), for: .normal)
+        if volumeButton.currentImage == UIImage(named: volumeLoudImg) {
+            volumeButton.setImage(UIImage(named: volumeMuteImg), for: .normal)
         } else {
-            // Change the image back to the original image
-            volumeButton.setImage(UIImage(named: "VolumeLoud"), for: .normal)
+            volumeButton.setImage(UIImage(named: volumeLoudImg), for: .normal)
         }
     }
 }
