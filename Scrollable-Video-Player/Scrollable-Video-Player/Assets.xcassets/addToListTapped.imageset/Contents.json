@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "addToListTapped.png",
+      "filename" : "addToListTapped.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "addToListTapped@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "addToListTapped@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
