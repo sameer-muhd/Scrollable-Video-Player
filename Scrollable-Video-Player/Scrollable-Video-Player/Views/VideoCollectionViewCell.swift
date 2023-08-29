@@ -17,10 +17,29 @@ let shareButtonTappedImg = "shareButtonTapped"
 let backButtonImg = "ChevronLeft"
 let volumeLoudImg = "VolumeLoud"
 let volumeMuteImg = "VolumeMute"
+let backgroundImg = "TomHolland"
+
+// Options and title labels declared as constants
+let watchButtonLabelText = "Watch"
+let addToPlaylistButtonLabelText = "My List"
+let shareButtonLabelText = "Share"
+let titleText = "Spiderman arrives to rescue the town from Venom."
+let subtitleText = "Spiderman: Homecoming • Action • U/A 7+"
+
+// All labels font size and weight declared as constants
+let optionsLabelSize = CGFloat(12)
+let optionsLabelWeight = UIFont.Weight.medium
+
+let titleLabelSize = CGFloat(14)
+let titleLabelWeight = UIFont.Weight.bold
+
+let subtitleLabelSize = CGFloat(11)
+let subtitleLabelWeight = UIFont.Weight.regular
 
 class VideoCollectionViewCell: UICollectionViewCell {
+    // Background views and layers - Background image and gradient layer
     private let bgImage: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "TomHolland"))
+        let imageView = UIImageView(image: UIImage(named: backgroundImg))
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
@@ -37,6 +56,14 @@ class VideoCollectionViewCell: UICollectionViewCell {
         return gradientLayer
     }()
     
+    // Options views and labels - Options container, 3 buttons and their labels
+    private var optionsContainer: UIView = {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        
+        return container
+    }()
+    
     private var watchButton: UIButton = {
         let watchBtn = UIButton(type: .custom)
         
@@ -51,10 +78,10 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private var watchButtonLabel: UILabel = {
         let label = UILabel()
         
-        label.text = "Watch"
+        label.text = watchButtonLabelText
         label.textColor = .white
         label.textAlignment = .center
-        label.font = UIFont.notoSans(size: 12, weight: .medium)
+        label.font = UIFont.notoSans(size: optionsLabelSize, weight: optionsLabelWeight)
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -73,10 +100,10 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private var addToPlaylistButtonLabel: UILabel = {
         let label = UILabel()
         
-        label.text = "My List"
+        label.text = addToPlaylistButtonLabelText
         label.textColor = .white
         label.textAlignment = .center
-        label.font = UIFont.notoSans(size: 12, weight: .medium)
+        label.font = UIFont.notoSans(size: optionsLabelSize, weight: optionsLabelWeight)
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -95,16 +122,17 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private var shareButtonLabel: UILabel = {
         let label = UILabel()
         
-        label.text = "Share"
+        label.text = shareButtonLabelText
         label.textColor = .white
         label.textAlignment = .center
-        label.font = UIFont.notoSans(size: 12, weight: .medium)
+        label.font = UIFont.notoSans(size: optionsLabelSize, weight: optionsLabelWeight)
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
     }()
     
-    private var optionsContainer: UIView = {
+    // Text views and labels - Text Container and labels
+    private var textContainer: UIView = {
         let container = UIView()
         container.translatesAutoresizingMaskIntoConstraints = false
         
@@ -113,9 +141,9 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     private var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Spiderman arrives to rescue the town from Venom."
+        label.text = titleText
         label.numberOfLines = 2
-        label.font = UIFont.notoSans(size: 14, weight: .bold)
+        label.font = UIFont.notoSans(size: titleLabelSize, weight: titleLabelWeight)
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -124,22 +152,16 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     private var subtitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Spiderman: Homecoming • Action • U/A 7+"
+        label.text = subtitleText
         label.numberOfLines = 1
-        label.font = UIFont.notoSans(size: 11, weight: .regular)
+        label.font = UIFont.notoSans(size: subtitleLabelSize, weight: subtitleLabelWeight)
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
     }()
     
-    private var textContainer: UIView = {
-        let container = UIView()
-        container.translatesAutoresizingMaskIntoConstraints = false
-        
-        return container
-    }()
-    
+    // Backbutton and volume button
     private var backButton: UIButton = {
         let backBtn = UIButton(type: .custom)
         backBtn.setImage(UIImage(named: backButtonImg), for: .normal)
