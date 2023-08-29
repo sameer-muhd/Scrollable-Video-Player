@@ -48,14 +48,14 @@ class VideoCollectionViewCell: UICollectionViewCell {
         
         return label
     }()
-
+    
     private var addToPlaylistButton: UIButton = {
         let addBtn = UIButton(type: .custom)
         addBtn.setImage(UIImage(named: "addToList"), for: .normal)
         addBtn.setImage(UIImage(named: "addToListTapped"), for: .highlighted)
         addBtn.imageView?.contentMode = .scaleToFill
         addBtn.translatesAutoresizingMaskIntoConstraints = false
-
+        
         return addBtn
     }()
     
@@ -77,7 +77,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         shareBtn.setImage(UIImage(named: "shareButtonTapped"), for: .highlighted)
         shareBtn.imageView?.contentMode = .scaleToFill
         shareBtn.translatesAutoresizingMaskIntoConstraints = false
-
+        
         return shareBtn
     }()
     
@@ -105,6 +105,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         label.text = "Spiderman arrives to rescue the town from Venom."
         label.numberOfLines = 2
         label.font = UIFont.notoSans(size: 14, weight: .bold)
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -115,6 +116,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         label.text = "Spiderman: Homecoming • Action • U/A 7+"
         label.numberOfLines = 1
         label.font = UIFont.notoSans(size: 11, weight: .regular)
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -132,7 +134,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         backBtn.setImage(UIImage(named: "ChevronLeft"), for: .normal)
         backBtn.imageView?.contentMode = .scaleToFill
         backBtn.translatesAutoresizingMaskIntoConstraints = false
-
+        
         return backBtn
     }()
     
@@ -142,7 +144,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         volumeBtn.imageView?.contentMode = .scaleToFill
         volumeBtn.adjustsImageWhenHighlighted = false
         volumeBtn.translatesAutoresizingMaskIntoConstraints = false
-
+        
         return volumeBtn
     }()
     

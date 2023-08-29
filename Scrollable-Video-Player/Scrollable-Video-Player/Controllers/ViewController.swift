@@ -37,7 +37,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-            
+        
         setupCollectionView()
         setupTopBar()
         setupBottomBar()
@@ -59,16 +59,16 @@ class ViewController: UIViewController {
         ])
         
         // Set up paging behavior and horizontal scrolling
-            collectionView.isPagingEnabled = true
-            collectionView.showsVerticalScrollIndicator = false // Hide the horizontal scroll indicator
-            if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-                layout.minimumLineSpacing = 0  // Set this to control the spacing between cells
-            }
+        collectionView.isPagingEnabled = true
+        collectionView.showsVerticalScrollIndicator = false // Hide the horizontal scroll indicator
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.minimumLineSpacing = 0  // Set this to control the spacing between cells
+        }
     }
     
     private func setupTopBar() {
         view.addSubview(topBar)
-
+        
         NSLayoutConstraint.activate([
             topBar.topAnchor.constraint(equalTo: view.topAnchor),
             topBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -79,7 +79,7 @@ class ViewController: UIViewController {
     
     private func setupBottomBar() {
         view.addSubview(bottomBar)
-
+        
         NSLayoutConstraint.activate([
             bottomBar.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
             bottomBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
