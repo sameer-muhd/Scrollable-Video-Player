@@ -6,8 +6,16 @@
 //
 
 import UIKit
+import AVFoundation
+
+// Protocol delegate method used to set global mute/unmute state of cells
+protocol VideoCellDelegate: AnyObject {
+    func didToggleMuteState(for cell: VideoCollectionViewCell)
+}
 
 class VideoCollectionViewCell: UICollectionViewCell {
+    weak var delegate: VideoCellDelegate?
+
     // Image assets declared as constants
     private let playButtonImg = "playButton"
     private let addToListImg = "addToList"
@@ -66,11 +74,31 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private let topComponentsHeight: CGFloat = 30
     
     // Background views and layers - Background image and gradient layer
-    private lazy var bgImage: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: backgroundImg))
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        return imageView
+    var playerContainerView: UIView = {
+        let playerView = UIView()
+        playerView.backgroundColor = .clear
+        playerView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return playerView
+    }()
+    var progressUpdateTimer: Timer?
+    
+    var player: AVPlayer?
+    var playerLayer: AVPlayerLayer?
+    var playButton: UIButton = {
+        var playBtn = UIButton(type: .custom)
+        playBtn.setImage(UIImage(named: "playButtonVideo"), for: .normal)
+        playBtn.adjustsImageWhenHighlighted = false
+        playBtn.isHidden = true
+        return playBtn
+    }()
+    var isVideoLoaded = false
+    
+    var progressView: UIProgressView = {
+        let progressView = UIProgressView(progressViewStyle: .default)
+        progressView.progressTintColor = .progressFilled
+        progressView.trackTintColor =  .progressEmpty
+        return progressView
     }()
     
     private lazy var gradientLayer: CAGradientLayer = {
@@ -211,6 +239,19 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        commonInit()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func commonInit() {
+        player = AVPlayer()
+        playerLayer = AVPlayerLayer(player: player)
+        playerLayer?.videoGravity = .resizeAspectFill
         
         addBackgroundComponents()
         addOptionsComponents()
@@ -225,8 +266,19 @@ class VideoCollectionViewCell: UICollectionViewCell {
     }
     
     private func addBackgroundComponents() {
-        contentView.addSubview(bgImage)
+        if let playerLayer = playerLayer {
+            playerContainerView.layer.addSublayer(playerLayer)
+        }
+        
+        contentView.addSubview(playerContainerView)
         contentView.layer.addSublayer(gradientLayer)
+        contentView.addSubview(playButton)
+        
+        progressView.frame = CGRect(x: 0, y: contentView.frame.height - 4, width: contentView.frame.width, height: 4)
+        contentView.addSubview(progressView)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(videoViewTapped))
+        playerContainerView.addGestureRecognizer(tapGesture)
         
         gradientLayer.position = contentView.center
         bgImage.frame = contentView.bounds
@@ -288,6 +340,40 @@ class VideoCollectionViewCell: UICollectionViewCell {
         ])
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        // Release the player and any associated resources
+        player?.pause()
+        playButton.isHidden = true
+        isVideoLoaded = false
+    }
+    
+    func configureVideoPlayer(with videoURL: String) {
+        player?.replaceCurrentItem(with: AVPlayerItem(url: URL(string: videoURL)!))
+        player?.pause()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        playerLayer?.frame = contentView.bounds
+        gradientLayer.frame = contentView.bounds
+        gradientLayer.position = contentView.center
+        
+        playButton.frame = CGRect(x: 0, y: 0, width: 60, height: 60)
+        playButton.center = contentView.center
+        playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
+        
+        NSLayoutConstraint.activate([
+            // Player container constraints
+            playerContainerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            playerContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            playerContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            playerContainerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+        ])
+    }
+            
     private func addTextComponents() {
         textContainer.addSubview(titleLabel)
         textContainer.addSubview(subtitleLabel)
@@ -344,5 +430,91 @@ class VideoCollectionViewCell: UICollectionViewCell {
         } else {
             volumeButton.setImage(UIImage(named: volumeLoudImg), for: .normal)
         }
+    }
+    
+    @objc func volumeButtonTapped() {
+        // Check the current image of the button
+        if volumeButton.currentImage == UIImage(named: "VolumeLoud") {
+            // Change the image to a different image and mute the player
+            player?.isMuted = true
+            volumeButton.setImage(UIImage(named: "VolumeMute"), for: .normal)
+            delegate?.didToggleMuteState(for: self)
+        } else {
+            // Change the image back to the original image and unmute the player
+            player?.isMuted = false
+            volumeButton.setImage(UIImage(named: "VolumeLoud"), for: .normal)
+            delegate?.didToggleMuteState(for: self)
+        }
+    }
+    
+    @objc func playButtonTapped() {
+        videoViewTapped()
+    }
+    
+    @objc func videoViewTapped() {
+        self.updateProgress()
+        if let player = player {
+            if player.rate != 0 {
+                // Video is playing, pause it
+                player.pause()
+                playButton.isHidden = false
+            } else {
+                // Video is paused, play it
+                player.play()
+                playButton.isHidden = true
+            }
+        }
+    }
+    
+    func updateProgress() {
+        guard let player = player, let currentItem = player.currentItem else { return }
+        
+        let currentTime = CMTimeGetSeconds(player.currentTime())
+        let duration = CMTimeGetSeconds(currentItem.duration)
+        
+        let progress = Float(currentTime / duration)
+        progressView.progress = progress
+    }
+    
+    func startVideoPlayback(with isMuted: Bool) {
+        if isMuted {
+            player?.isMuted = true
+            volumeButton.setImage(UIImage(named: "VolumeMute"), for: .normal)
+        } else {
+            player?.isMuted = false
+            volumeButton.setImage(UIImage(named: "VolumeLoud"), for: .normal)
+        }
+        
+        if !isVideoLoaded {
+            isVideoLoaded = true
+            playButton.isHidden = true
+            player?.seek(to: .zero)
+            player?.play()
+            NotificationCenter.default.addObserver(self, selector: #selector(videoDidFinishPlaying(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+            
+            progressUpdateTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in
+                self?.updateProgress()
+            }
+        }
+    }
+    
+    func pauseVideoPlayback() {
+        if isVideoLoaded {
+            isVideoLoaded = false
+            player?.pause()
+            playButton.isHidden = false
+            NotificationCenter.default.removeObserver(self)
+            progressUpdateTimer?.invalidate()
+            progressUpdateTimer = nil
+        }
+    }
+    
+    @objc func videoDidFinishPlaying(_ notification: Notification) {
+        player?.seek(to: CMTime.zero)
+        player?.play()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }

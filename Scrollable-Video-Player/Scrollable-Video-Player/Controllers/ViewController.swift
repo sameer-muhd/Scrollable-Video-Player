@@ -6,8 +6,18 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController {
+    private var isGlobalMute: Bool = true
+    
+    private var videoURLs: [String] = [
+        "https://zshorts-dev.zee5.com/zshorts/file1/index.m3u8",
+        "https://zshorts-dev.zee5.com/zshorts/file2/index.m3u8",
+        "https://zshorts-dev.zee5.com/zshorts/file3/index.m3u8",
+        "https://zshorts-dev.zee5.com/zshorts/file4/index.m3u8",
+        "https://zshorts-dev.zee5.com/zshorts/file5/index.m3u8",]
+        
     // Constraints values declared as constants
     private let minimumCellSpacing: CGFloat = .zero
     private let topBarHeight: CGFloat = 50
@@ -38,6 +48,7 @@ class ViewController: UIViewController {
         collectionView.isPagingEnabled = true
         collectionView.showsVerticalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.contentInsetAdjustmentBehavior = .never
         
         collectionView.register(VideoCollectionViewCell.self, forCellWithReuseIdentifier: videoCellIdentifier)
         
@@ -89,9 +100,9 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, VideoCellDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return videoURLs.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -99,12 +110,33 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
             return VideoCollectionViewCell()
         }
         
+        cell.delegate = self
+        let videoURL = videoURLs[indexPath.item]
+        cell.configureVideoPlayer(with: videoURL)
+        
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let videoCell = cell as? VideoCollectionViewCell {
+            videoCell.startVideoPlayback(with: isGlobalMute)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let videoCell = cell as? VideoCollectionViewCell {
+            videoCell.pauseVideoPlayback()
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let itemWidth = collectionView.bounds.width
         let itemHeight = collectionView.bounds.height
         return CGSize(width: itemWidth, height: itemHeight)
+    }
+    
+    func didToggleMuteState(for cell: VideoCollectionViewCell) {
+        // Update global mute state, so that whenever next cells, they use this mute state
+        isGlobalMute.toggle()
     }
 }
