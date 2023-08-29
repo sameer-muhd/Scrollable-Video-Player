@@ -11,6 +11,7 @@ import UIKit
 let minimumCellSpacing = CGFloat(0.0)
 let topBarHeight = CGFloat(50.0)
 let bottomBarHeight = CGFloat(56.0)
+let videoCellIdentifier = "VideoCell"
 
 class ViewController: UIViewController {
     private let topBar: UIView = {
@@ -38,7 +39,7 @@ class ViewController: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        collectionView.register(VideoCollectionViewCell.self, forCellWithReuseIdentifier: "VideoCell")
+        collectionView.register(VideoCollectionViewCell.self, forCellWithReuseIdentifier: videoCellIdentifier)
         
         return collectionView
     }()
@@ -94,7 +95,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCell", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: videoCellIdentifier, for: indexPath)
         
         return cell
     }
