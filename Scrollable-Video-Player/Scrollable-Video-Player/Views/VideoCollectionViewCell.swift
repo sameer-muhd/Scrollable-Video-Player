@@ -73,7 +73,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    private let gradientLayer: CAGradientLayer = {
+    private lazy var gradientLayer: CAGradientLayer = {
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
         
@@ -85,7 +85,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     }()
     
     // Options views and labels - Options container, 3 buttons and their labels
-    private var optionsContainer: UIView = {
+    private lazy var optionsContainer: UIView = {
         let container = UIView()
         container.translatesAutoresizingMaskIntoConstraints = false
         
@@ -160,7 +160,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     }()
     
     // Text views and labels - Text Container and labels
-    private var textContainer: UIView = {
+    private lazy var textContainer: UIView = {
         let container = UIView()
         container.translatesAutoresizingMaskIntoConstraints = false
         

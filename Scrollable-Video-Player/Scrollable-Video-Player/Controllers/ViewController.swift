@@ -14,14 +14,14 @@ class ViewController: UIViewController {
     private let bottomBarHeight: CGFloat = 56
     private let videoCellIdentifier = "VideoCell"
     
-    private let topBar: UIView = {
+    private lazy var topBar: UIView = {
         let view = UIView()
         view.backgroundColor = .surfacePrimary
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    private let bottomBar: UIView = {
+    private lazy var bottomBar: UIView = {
         let view = UIView()
         view.backgroundColor = .surfacePrimary
         view.translatesAutoresizingMaskIntoConstraints = false
