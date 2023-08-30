@@ -10,7 +10,7 @@ import UIKit
 
 extension UIColor {
     public static var surfacePrimary: UIColor {
-        return UIColor(red: 15.0 / 255.0, green: 6.0 / 255.0, blue: 23.0 / 255.0, alpha: 1.0)
+        return UIColor(red: 0.059, green: 0.024, blue: 0.090, alpha: 1.0)
     }
 }
 
