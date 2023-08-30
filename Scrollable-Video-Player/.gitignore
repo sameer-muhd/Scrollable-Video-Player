@@ -94,6 +94,5 @@ fastlane/test_output
 
 iOSInjectionProject/
 
-# MacOS temporary files
-../.DS_Store
+# MacOS temporary filea
 .DS_Store
