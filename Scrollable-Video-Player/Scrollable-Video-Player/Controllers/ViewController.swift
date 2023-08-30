@@ -7,13 +7,13 @@
 
 import UIKit
 
-// Constraints values declared as constants
-let minimumCellSpacing = CGFloat(0.0)
-let topBarHeight = CGFloat(50.0)
-let bottomBarHeight = CGFloat(56.0)
-let videoCellIdentifier = "VideoCell"
-
 class ViewController: UIViewController {
+    // Constraints values declared as constants
+    private let minimumCellSpacing = CGFloat(0.0)
+    private let topBarHeight = CGFloat(50.0)
+    private let bottomBarHeight = CGFloat(56.0)
+    private let videoCellIdentifier = "VideoCell"
+    
     private let topBar: UIView = {
         let view = UIView()
         view.backgroundColor = .surfacePrimary
@@ -28,7 +28,7 @@ class ViewController: UIViewController {
         return view
     }()
     
-    private let collectionView: UICollectionView = {
+    private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = minimumCellSpacing
