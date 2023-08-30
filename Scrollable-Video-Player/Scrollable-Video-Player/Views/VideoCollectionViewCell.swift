@@ -26,44 +26,44 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private let subtitleText = "Spiderman: Homecoming • Action • U/A 7+"
 
     // All labels font size and weight declared as constants
-    private let optionsLabelSize = CGFloat(12)
+    private let optionsLabelSize: CGFloat = 12
     private let optionsLabelWeight = UIFont.Weight.medium
 
-    private let titleLabelSize = CGFloat(14)
+    private let titleLabelSize: CGFloat = 14
     private let titleLabelWeight = UIFont.Weight.bold
 
-    private let subtitleLabelSize = CGFloat(11)
+    private let subtitleLabelSize: CGFloat = 11
     private let subtitleLabelWeight = UIFont.Weight.regular
     
     // Constraints declared as constants
-    private let optionsContainerOffsetFromBottom = CGFloat(-24)
-    private let optionsContainerOffsetFromTrailing = CGFloat(-24)
-    private let optionsContainerWidth = CGFloat(42)
-    private let optionsContainerHeight = CGFloat(206)
+    private let optionsContainerOffsetFromBottom: CGFloat = -24
+    private let optionsContainerOffsetFromTrailing: CGFloat = -24
+    private let optionsContainerWidth: CGFloat = 42
+    private let optionsContainerHeight: CGFloat = 206
     
-    private let optionsIconWidth = CGFloat(40)
-    private let optionsIconHeight = CGFloat(40)
-    private let optionsIntraGap = CGFloat(16)
+    private let optionsIconWidth: CGFloat = 40
+    private let optionsIconHeight: CGFloat = 40
+    private let optionsIntraGap: CGFloat = 16
     
-    private let optionsLabelWidth = CGFloat(42)
-    private let optionsLabelHeight = CGFloat(20)
+    private let optionsLabelWidth: CGFloat = 42
+    private let optionsLabelHeight: CGFloat = 20
     
-    private let textContainerOffsetFromTrailing = CGFloat(24)
-    private let textContainerHeight = CGFloat(102)
+    private let textContainerOffsetFromTrailing: CGFloat = 24
+    private let textContainerHeight: CGFloat = 102
     
-    private let titleLabelOffsetFromTop = CGFloat(16)
-    private let titleLabelOffsetFromLeading = CGFloat(24)
-    private let titleLabelHeight = CGFloat(42)
+    private let titleLabelOffsetFromTop: CGFloat = 16
+    private let titleLabelOffsetFromLeading: CGFloat = 24
+    private let titleLabelHeight: CGFloat = 42
     
-    private let subtitleLabelOffsetFromLeading = CGFloat(24)
-    private let subtitleLabelHeight = CGFloat(16)
+    private let subtitleLabelOffsetFromLeading: CGFloat = 24
+    private let subtitleLabelHeight: CGFloat = 16
     
-    private let topComponentsOffsetFromTop = CGFloat(16)
-    private let topComponentOffsetFromLeading = CGFloat(16)
-    private let topComponentsOffsetFromTrailing = CGFloat(-24)
+    private let topComponentsOffsetFromTop: CGFloat = 16
+    private let topComponentOffsetFromLeading: CGFloat = 16
+    private let topComponentsOffsetFromTrailing: CGFloat = -24
     
-    private let topComponentsWidth = CGFloat(30)
-    private let topComponentsHeight = CGFloat(30)
+    private let topComponentsWidth: CGFloat = 30
+    private let topComponentsHeight: CGFloat = 30
     
     // Background views and layers - Background image and gradient layer
     private lazy var bgImage: UIImageView = {

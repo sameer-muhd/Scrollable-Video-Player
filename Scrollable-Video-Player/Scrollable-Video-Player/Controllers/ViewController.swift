@@ -9,9 +9,9 @@ import UIKit
 
 class ViewController: UIViewController {
     // Constraints values declared as constants
-    private let minimumCellSpacing = CGFloat(0.0)
-    private let topBarHeight = CGFloat(50.0)
-    private let bottomBarHeight = CGFloat(56.0)
+    private let minimumCellSpacing: CGFloat = .zero
+    private let topBarHeight: CGFloat = 50
+    private let bottomBarHeight: CGFloat = 56
     private let videoCellIdentifier = "VideoCell"
     
     private let topBar: UIView = {
