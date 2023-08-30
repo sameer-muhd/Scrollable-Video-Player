@@ -10,11 +10,9 @@ import UIKit
 class VideoCollectionViewCell: UICollectionViewCell {
     // Image assets declared as constants
     private let playButtonImg = "playButton"
-    private let playButtonTappedImg = "playButtonTapped"
     private let addToListImg = "addToList"
-    private let addToListTappedImg = "addToListTapped"
+    private let addToListSelectedImg = "addToListSelected"
     private let shareButtonImg = "shareButton"
-    private let shareButtonTappedImg = "shareButtonTapped"
     private let backButtonImg = "ChevronLeft"
     private let volumeLoudImg = "VolumeLoud"
     private let volumeMuteImg = "VolumeMute"
@@ -98,7 +96,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         let watchBtn = UIButton(type: .custom)
         
         watchBtn.setImage(UIImage(named: playButtonImg), for: .normal)
-        watchBtn.setImage(UIImage(named: playButtonTappedImg), for: .highlighted)
+        watchBtn.adjustsImageWhenHighlighted = false
         watchBtn.imageView?.contentMode = .scaleToFill
         watchBtn.translatesAutoresizingMaskIntoConstraints = false
         
@@ -120,7 +118,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private lazy var addToPlaylistButton: UIButton = {
         let addBtn = UIButton(type: .custom)
         addBtn.setImage(UIImage(named: addToListImg), for: .normal)
-        addBtn.setImage(UIImage(named: addToListTappedImg), for: .highlighted)
+        addBtn.setImage(UIImage(named: addToListSelectedImg), for: .highlighted)
         addBtn.imageView?.contentMode = .scaleToFill
         addBtn.translatesAutoresizingMaskIntoConstraints = false
         
@@ -142,7 +140,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private lazy var shareButton: UIButton = {
         let shareBtn = UIButton(type: .custom)
         shareBtn.setImage(UIImage(named: shareButtonImg), for: .normal)
-        shareBtn.setImage(UIImage(named: shareButtonTappedImg), for: .highlighted)
+        shareBtn.adjustsImageWhenHighlighted = false
         shareBtn.imageView?.contentMode = .scaleToFill
         shareBtn.translatesAutoresizingMaskIntoConstraints = false
         
