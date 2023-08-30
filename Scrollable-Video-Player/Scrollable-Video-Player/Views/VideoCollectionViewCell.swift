@@ -7,38 +7,68 @@
 
 import UIKit
 
-// Image assets declared as constants
-let playButtonImg = "playButton"
-let playButtonTappedImg = "playButtonTapped"
-let addToListImg = "addToList"
-let addToListTappedImg = "addToListTapped"
-let shareButtonImg = "shareButton"
-let shareButtonTappedImg = "shareButtonTapped"
-let backButtonImg = "ChevronLeft"
-let volumeLoudImg = "VolumeLoud"
-let volumeMuteImg = "VolumeMute"
-let backgroundImg = "TomHolland"
-
-// Options and title labels declared as constants
-let watchButtonLabelText = "Watch"
-let addToPlaylistButtonLabelText = "My List"
-let shareButtonLabelText = "Share"
-let titleText = "Spiderman arrives to rescue the town from Venom."
-let subtitleText = "Spiderman: Homecoming • Action • U/A 7+"
-
-// All labels font size and weight declared as constants
-let optionsLabelSize = CGFloat(12)
-let optionsLabelWeight = UIFont.Weight.medium
-
-let titleLabelSize = CGFloat(14)
-let titleLabelWeight = UIFont.Weight.bold
-
-let subtitleLabelSize = CGFloat(11)
-let subtitleLabelWeight = UIFont.Weight.regular
-
 class VideoCollectionViewCell: UICollectionViewCell {
+    // Image assets declared as constants
+    private let playButtonImg = "playButton"
+    private let playButtonTappedImg = "playButtonTapped"
+    private let addToListImg = "addToList"
+    private let addToListTappedImg = "addToListTapped"
+    private let shareButtonImg = "shareButton"
+    private let shareButtonTappedImg = "shareButtonTapped"
+    private let backButtonImg = "ChevronLeft"
+    private let volumeLoudImg = "VolumeLoud"
+    private let volumeMuteImg = "VolumeMute"
+    private let backgroundImg = "TomHolland"
+
+    // Options and title labels declared as constants
+    private let watchButtonLabelText = "Watch"
+    private let addToPlaylistButtonLabelText = "My List"
+    private let shareButtonLabelText = "Share"
+    private let titleText = "Spiderman arrives to rescue the town from Venom."
+    private let subtitleText = "Spiderman: Homecoming • Action • U/A 7+"
+
+    // All labels font size and weight declared as constants
+    private let optionsLabelSize = CGFloat(12)
+    private let optionsLabelWeight = UIFont.Weight.medium
+
+    private let titleLabelSize = CGFloat(14)
+    private let titleLabelWeight = UIFont.Weight.bold
+
+    private let subtitleLabelSize = CGFloat(11)
+    private let subtitleLabelWeight = UIFont.Weight.regular
+    
+    // Constraints declared as constants
+    private let optionsContainerOffsetFromBottom = CGFloat(-24)
+    private let optionsContainerOffsetFromTrailing = CGFloat(-24)
+    private let optionsContainerWidth = CGFloat(42)
+    private let optionsContainerHeight = CGFloat(206)
+    
+    private let optionsIconWidth = CGFloat(40)
+    private let optionsIconHeight = CGFloat(40)
+    private let optionsIntraGap = CGFloat(16)
+    
+    private let optionsLabelWidth = CGFloat(42)
+    private let optionsLabelHeight = CGFloat(20)
+    
+    private let textContainerOffsetFromTrailing = CGFloat(24)
+    private let textContainerHeight = CGFloat(102)
+    
+    private let titleLabelOffsetFromTop = CGFloat(16)
+    private let titleLabelOffsetFromLeading = CGFloat(24)
+    private let titleLabelHeight = CGFloat(42)
+    
+    private let subtitleLabelOffsetFromLeading = CGFloat(24)
+    private let subtitleLabelHeight = CGFloat(16)
+    
+    private let topComponentsOffsetFromTop = CGFloat(16)
+    private let topComponentOffsetFromLeading = CGFloat(16)
+    private let topComponentsOffsetFromTrailing = CGFloat(-24)
+    
+    private let topComponentsWidth = CGFloat(30)
+    private let topComponentsHeight = CGFloat(30)
+    
     // Background views and layers - Background image and gradient layer
-    private let bgImage: UIImageView = {
+    private lazy var bgImage: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: backgroundImg))
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -64,7 +94,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         return container
     }()
     
-    private var watchButton: UIButton = {
+    private lazy var watchButton: UIButton = {
         let watchBtn = UIButton(type: .custom)
         
         watchBtn.setImage(UIImage(named: playButtonImg), for: .normal)
@@ -75,7 +105,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         return watchBtn
     }()
     
-    private var watchButtonLabel: UILabel = {
+    private lazy var watchButtonLabel: UILabel = {
         let label = UILabel()
         
         label.text = watchButtonLabelText
@@ -87,7 +117,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private var addToPlaylistButton: UIButton = {
+    private lazy var addToPlaylistButton: UIButton = {
         let addBtn = UIButton(type: .custom)
         addBtn.setImage(UIImage(named: addToListImg), for: .normal)
         addBtn.setImage(UIImage(named: addToListTappedImg), for: .highlighted)
@@ -97,7 +127,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         return addBtn
     }()
     
-    private var addToPlaylistButtonLabel: UILabel = {
+    private lazy var addToPlaylistButtonLabel: UILabel = {
         let label = UILabel()
         
         label.text = addToPlaylistButtonLabelText
@@ -109,7 +139,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private var shareButton: UIButton = {
+    private lazy var shareButton: UIButton = {
         let shareBtn = UIButton(type: .custom)
         shareBtn.setImage(UIImage(named: shareButtonImg), for: .normal)
         shareBtn.setImage(UIImage(named: shareButtonTappedImg), for: .highlighted)
@@ -119,7 +149,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         return shareBtn
     }()
     
-    private var shareButtonLabel: UILabel = {
+    private lazy var shareButtonLabel: UILabel = {
         let label = UILabel()
         
         label.text = shareButtonLabelText
@@ -139,7 +169,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         return container
     }()
     
-    private var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = titleText
         label.numberOfLines = 2
@@ -150,7 +180,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private var subtitleLabel: UILabel = {
+    private lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.text = subtitleText
         label.numberOfLines = 1
@@ -162,7 +192,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     }()
     
     // Backbutton and volume button
-    private var backButton: UIButton = {
+    private lazy var backButton: UIButton = {
         let backBtn = UIButton(type: .custom)
         backBtn.setImage(UIImage(named: backButtonImg), for: .normal)
         backBtn.imageView?.contentMode = .scaleToFill
@@ -171,7 +201,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         return backBtn
     }()
     
-    private var volumeButton: UIButton = {
+    private lazy var volumeButton: UIButton = {
         let volumeBtn = UIButton(type: .custom)
         volumeBtn.setImage(UIImage(named: volumeLoudImg), for: .normal)
         volumeBtn.imageView?.contentMode = .scaleToFill
@@ -217,46 +247,46 @@ class VideoCollectionViewCell: UICollectionViewCell {
         
         NSLayoutConstraint.activate([
             // Options Container constraints
-            optionsContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
-            optionsContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            optionsContainer.widthAnchor.constraint(equalToConstant: 42),
-            optionsContainer.heightAnchor.constraint(equalToConstant: 206),
+            optionsContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: optionsContainerOffsetFromBottom),
+            optionsContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: optionsContainerOffsetFromTrailing),
+            optionsContainer.widthAnchor.constraint(equalToConstant: optionsContainerWidth),
+            optionsContainer.heightAnchor.constraint(equalToConstant: optionsContainerHeight),
             
             // Watch button constraints
             watchButton.topAnchor.constraint(equalTo: optionsContainer.topAnchor),
             watchButton.centerXAnchor.constraint(equalTo: optionsContainer.centerXAnchor),
-            watchButton.widthAnchor.constraint(equalToConstant: 40),
-            watchButton.heightAnchor.constraint(equalToConstant: 40),
+            watchButton.widthAnchor.constraint(equalToConstant: optionsIconWidth),
+            watchButton.heightAnchor.constraint(equalToConstant: optionsIconHeight),
             
             // Watch button label constraints
             watchButtonLabel.topAnchor.constraint(equalTo: watchButton.bottomAnchor),
             watchButtonLabel.centerXAnchor.constraint(equalTo: optionsContainer.centerXAnchor),
-            watchButtonLabel.widthAnchor.constraint(equalToConstant: 40),
-            watchButtonLabel.heightAnchor.constraint(equalToConstant: 20),
+            watchButtonLabel.widthAnchor.constraint(equalToConstant: optionsLabelWidth),
+            watchButtonLabel.heightAnchor.constraint(equalToConstant: optionsLabelHeight),
             
             // Add to playlist button constraints
-            addToPlaylistButton.topAnchor.constraint(equalTo: watchButtonLabel.bottomAnchor, constant: 16),
+            addToPlaylistButton.topAnchor.constraint(equalTo: watchButtonLabel.bottomAnchor, constant: optionsIntraGap),
             addToPlaylistButton.centerXAnchor.constraint(equalTo: optionsContainer.centerXAnchor),
-            addToPlaylistButton.widthAnchor.constraint(equalToConstant: 40),
-            addToPlaylistButton.heightAnchor.constraint(equalToConstant: 40),
+            addToPlaylistButton.widthAnchor.constraint(equalToConstant: optionsIconWidth),
+            addToPlaylistButton.heightAnchor.constraint(equalToConstant: optionsIconHeight),
             
             // Add to playlist button label constraints
             addToPlaylistButtonLabel.topAnchor.constraint(equalTo: addToPlaylistButton.bottomAnchor),
             addToPlaylistButtonLabel.centerXAnchor.constraint(equalTo: optionsContainer.centerXAnchor),
-            addToPlaylistButtonLabel.widthAnchor.constraint(equalToConstant: 42),
-            addToPlaylistButtonLabel.heightAnchor.constraint(equalToConstant: 20),
+            addToPlaylistButtonLabel.widthAnchor.constraint(equalToConstant: optionsLabelWidth),
+            addToPlaylistButtonLabel.heightAnchor.constraint(equalToConstant: optionsLabelHeight),
             
             // Share Button constraints
-            shareButton.topAnchor.constraint(equalTo: addToPlaylistButtonLabel.bottomAnchor, constant: 16),
+            shareButton.topAnchor.constraint(equalTo: addToPlaylistButtonLabel.bottomAnchor, constant: optionsIntraGap),
             shareButton.centerXAnchor.constraint(equalTo: optionsContainer.centerXAnchor),
-            shareButton.widthAnchor.constraint(equalToConstant: 40),
-            shareButton.heightAnchor.constraint(equalToConstant: 40),
+            shareButton.widthAnchor.constraint(equalToConstant: optionsIconWidth),
+            shareButton.heightAnchor.constraint(equalToConstant: optionsIconHeight),
             
             // Share Button label constraints
             shareButtonLabel.topAnchor.constraint(equalTo: shareButton.bottomAnchor),
             shareButtonLabel.centerXAnchor.constraint(equalTo: optionsContainer.centerXAnchor),
-            shareButtonLabel.widthAnchor.constraint(equalToConstant: 40),
-            shareButtonLabel.heightAnchor.constraint(equalToConstant: 20)
+            shareButtonLabel.widthAnchor.constraint(equalToConstant: optionsLabelWidth),
+            shareButtonLabel.heightAnchor.constraint(equalToConstant: optionsLabelHeight)
         ])
     }
     
@@ -270,20 +300,20 @@ class VideoCollectionViewCell: UICollectionViewCell {
             // Text cotainer constraints
             textContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             textContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            textContainer.trailingAnchor.constraint(equalTo: optionsContainer.leadingAnchor, constant: 24),
-            textContainer.heightAnchor.constraint(equalToConstant: 102),
+            textContainer.trailingAnchor.constraint(equalTo: optionsContainer.leadingAnchor, constant: textContainerOffsetFromTrailing),
+            textContainer.heightAnchor.constraint(equalToConstant: textContainerHeight),
             
             // Title label constraints
-            titleLabel.topAnchor.constraint(equalTo: textContainer.topAnchor, constant: 16),
-            titleLabel.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor, constant: 24),
-            titleLabel.widthAnchor.constraint(equalTo: textContainer.widthAnchor, multiplier: 1.0),
-            titleLabel.heightAnchor.constraint(equalToConstant: 42),
+            titleLabel.topAnchor.constraint(equalTo: textContainer.topAnchor, constant: titleLabelOffsetFromTop),
+            titleLabel.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor, constant: titleLabelOffsetFromLeading),
+            titleLabel.widthAnchor.constraint(equalTo: textContainer.widthAnchor),
+            titleLabel.heightAnchor.constraint(equalToConstant: titleLabelHeight),
             
             // Subtitle label constraints
-            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 0),
-            subtitleLabel.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor, constant: 24),
-            subtitleLabel.widthAnchor.constraint(equalTo: textContainer.widthAnchor, multiplier: 1.0),
-            subtitleLabel.heightAnchor.constraint(equalToConstant: 16)
+            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+            subtitleLabel.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor, constant: subtitleLabelOffsetFromLeading),
+            subtitleLabel.widthAnchor.constraint(equalTo: textContainer.widthAnchor),
+            subtitleLabel.heightAnchor.constraint(equalToConstant: subtitleLabelHeight)
         ])
     }
     
@@ -293,16 +323,16 @@ class VideoCollectionViewCell: UICollectionViewCell {
         
         NSLayoutConstraint.activate([
             // Back button constraints
-            backButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            backButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            backButton.widthAnchor.constraint(equalToConstant: 30),
-            backButton.heightAnchor.constraint(equalToConstant: 30),
+            backButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topComponentsOffsetFromTop),
+            backButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: topComponentOffsetFromLeading),
+            backButton.widthAnchor.constraint(equalToConstant: topComponentsWidth),
+            backButton.heightAnchor.constraint(equalToConstant: topComponentsHeight),
             
             // Volume Button constraints
-            volumeButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            volumeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            volumeButton.widthAnchor.constraint(equalToConstant: 30),
-            volumeButton.heightAnchor.constraint(equalToConstant: 30),
+            volumeButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topComponentsOffsetFromTop),
+            volumeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: topComponentsOffsetFromTrailing),
+            volumeButton.widthAnchor.constraint(equalToConstant: topComponentsWidth),
+            volumeButton.heightAnchor.constraint(equalToConstant: topComponentsHeight),
         ])
     }
     
