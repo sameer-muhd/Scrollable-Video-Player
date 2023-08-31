@@ -110,7 +110,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
             return VideoCollectionViewCell()
         }
         
-        cell.delegate = self
+        cell.globalMuteStateDelegate = self
         let videoURL = videoURLs[indexPath.item]
         cell.configureVideoPlayer(with: videoURL)
         

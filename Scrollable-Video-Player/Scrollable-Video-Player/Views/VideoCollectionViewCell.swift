@@ -14,8 +14,6 @@ protocol VideoCellDelegate: AnyObject {
 }
 
 class VideoCollectionViewCell: UICollectionViewCell {
-    weak var delegate: VideoCellDelegate?
-
     // Image assets declared as constants
     private let playButtonImg = "playButton"
     private let addToListImg = "addToList"
@@ -24,7 +22,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private let backButtonImg = "ChevronLeft"
     private let volumeLoudImg = "VolumeLoud"
     private let volumeMuteImg = "VolumeMute"
-    private let backgroundImg = "TomHolland"
+    private let playButtonVideoImg = "playButtonVideo"
 
     // Options and title labels declared as constants
     private let watchButtonLabelText = "Watch"
@@ -73,28 +71,33 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private let topComponentsWidth: CGFloat = 30
     private let topComponentsHeight: CGFloat = 30
     
-    // Background views and layers - Background image and gradient layer
-    var playerContainerView: UIView = {
+    // Delegate used communicate to controller, used to set global mute state
+    weak var globalMuteStateDelegate: VideoCellDelegate?
+    
+    // Background views and layers - Player container, player layer, play button, progress bar and gradient layer
+    private lazy var playerContainerView: UIView = {
         let playerView = UIView()
         playerView.backgroundColor = .clear
         playerView.translatesAutoresizingMaskIntoConstraints = false
         
         return playerView
     }()
-    var progressUpdateTimer: Timer?
     
-    var player: AVPlayer?
-    var playerLayer: AVPlayerLayer?
-    var playButton: UIButton = {
+    private var player: AVPlayer?
+    private var playerLayer: AVPlayerLayer?
+    
+    private lazy var playButton: UIButton = {
         var playBtn = UIButton(type: .custom)
-        playBtn.setImage(UIImage(named: "playButtonVideo"), for: .normal)
+        playBtn.setImage(UIImage(named: playButtonVideoImg), for: .normal)
         playBtn.adjustsImageWhenHighlighted = false
         playBtn.isHidden = true
+        
         return playBtn
     }()
-    var isVideoLoaded = false
+    private var progressUpdateTimer: Timer?
+    private var isVideoLoaded = false
     
-    var progressView: UIProgressView = {
+    private lazy var progressView: UIProgressView = {
         let progressView = UIProgressView(progressViewStyle: .default)
         progressView.progressTintColor = .progressFilled
         progressView.trackTintColor =  .progressEmpty
@@ -145,6 +148,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     private lazy var addToPlaylistButton: UIButton = {
         let addBtn = UIButton(type: .custom)
+        
         addBtn.setImage(UIImage(named: addToListImg), for: .normal)
         addBtn.setImage(UIImage(named: addToListSelectedImg), for: .highlighted)
         addBtn.imageView?.contentMode = .scaleToFill
@@ -167,6 +171,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     private lazy var shareButton: UIButton = {
         let shareBtn = UIButton(type: .custom)
+        
         shareBtn.setImage(UIImage(named: shareButtonImg), for: .normal)
         shareBtn.adjustsImageWhenHighlighted = false
         shareBtn.imageView?.contentMode = .scaleToFill
@@ -197,6 +202,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
+        
         label.text = titleText
         label.numberOfLines = 2
         label.font = UIFont.notoSans(size: titleLabelSize, weight: titleLabelWeight)
@@ -208,6 +214,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     private lazy var subtitleLabel: UILabel = {
         let label = UILabel()
+        
         label.text = subtitleText
         label.numberOfLines = 1
         label.font = UIFont.notoSans(size: subtitleLabelSize, weight: subtitleLabelWeight)
@@ -220,6 +227,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     // Backbutton and volume button
     private lazy var backButton: UIButton = {
         let backBtn = UIButton(type: .custom)
+        
         backBtn.setImage(UIImage(named: backButtonImg), for: .normal)
         backBtn.imageView?.contentMode = .scaleToFill
         backBtn.translatesAutoresizingMaskIntoConstraints = false
@@ -229,6 +237,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     private lazy var volumeButton: UIButton = {
         let volumeBtn = UIButton(type: .custom)
+        
         volumeBtn.setImage(UIImage(named: volumeLoudImg), for: .normal)
         volumeBtn.imageView?.contentMode = .scaleToFill
         volumeBtn.adjustsImageWhenHighlighted = false
@@ -261,10 +270,6 @@ class VideoCollectionViewCell: UICollectionViewCell {
         addVolumeButtonAction()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     private func addBackgroundComponents() {
         if let playerLayer = playerLayer {
             playerContainerView.layer.addSublayer(playerLayer)
@@ -281,7 +286,6 @@ class VideoCollectionViewCell: UICollectionViewCell {
         playerContainerView.addGestureRecognizer(tapGesture)
         
         gradientLayer.position = contentView.center
-        bgImage.frame = contentView.bounds
         gradientLayer.frame = contentView.bounds
     }
     
@@ -425,25 +429,17 @@ class VideoCollectionViewCell: UICollectionViewCell {
     }
     
     @objc private func volumeButtonTapped() {
-        if volumeButton.currentImage == UIImage(named: volumeLoudImg) {
-            volumeButton.setImage(UIImage(named: volumeMuteImg), for: .normal)
-        } else {
-            volumeButton.setImage(UIImage(named: volumeLoudImg), for: .normal)
-        }
-    }
-    
-    @objc func volumeButtonTapped() {
         // Check the current image of the button
-        if volumeButton.currentImage == UIImage(named: "VolumeLoud") {
+        if volumeButton.currentImage == UIImage(named: volumeLoudImg) {
             // Change the image to a different image and mute the player
             player?.isMuted = true
-            volumeButton.setImage(UIImage(named: "VolumeMute"), for: .normal)
-            delegate?.didToggleMuteState(for: self)
+            volumeButton.setImage(UIImage(named: volumeMuteImg), for: .normal)
+            globalMuteStateDelegate?.didToggleMuteState(for: self)
         } else {
             // Change the image back to the original image and unmute the player
             player?.isMuted = false
-            volumeButton.setImage(UIImage(named: "VolumeLoud"), for: .normal)
-            delegate?.didToggleMuteState(for: self)
+            volumeButton.setImage(UIImage(named: volumeLoudImg), for: .normal)
+            globalMuteStateDelegate?.didToggleMuteState(for: self)
         }
     }
     
@@ -452,7 +448,6 @@ class VideoCollectionViewCell: UICollectionViewCell {
     }
     
     @objc func videoViewTapped() {
-        self.updateProgress()
         if let player = player {
             if player.rate != 0 {
                 // Video is playing, pause it
@@ -479,10 +474,10 @@ class VideoCollectionViewCell: UICollectionViewCell {
     func startVideoPlayback(with isMuted: Bool) {
         if isMuted {
             player?.isMuted = true
-            volumeButton.setImage(UIImage(named: "VolumeMute"), for: .normal)
+            volumeButton.setImage(UIImage(named: volumeMuteImg), for: .normal)
         } else {
             player?.isMuted = false
-            volumeButton.setImage(UIImage(named: "VolumeLoud"), for: .normal)
+            volumeButton.setImage(UIImage(named: volumeLoudImg), for: .normal)
         }
         
         if !isVideoLoaded {
