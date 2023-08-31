@@ -14,7 +14,7 @@ extension UIColor {
     }
     
     public static var progressFilled: UIColor {
-        return UIColor(red: 167.0 / 255.0, green: 133.0 / 255.0, blue: 255.0 / 255.0, alpha: 1.0)
+        return UIColor(red: 0.655, green: 0.522, blue: 1.0, alpha: 1.0)
     }
     
     public static var progressEmpty: UIColor {
