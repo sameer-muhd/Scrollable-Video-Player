@@ -394,8 +394,8 @@ class VideoCollectionViewCell: UICollectionViewCell {
     func configureVideoPlayer(with videoURL: String) {
         player?.replaceCurrentItem(with: AVPlayerItem(url: URL(string: videoURL)!))
         player?.pause()
-    
-            
+    }
+
     private func addTextComponents() {
         textContainer.addSubview(titleLabel)
         textContainer.addSubview(subtitleLabel)
