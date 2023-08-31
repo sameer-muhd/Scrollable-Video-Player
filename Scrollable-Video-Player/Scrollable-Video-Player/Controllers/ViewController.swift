@@ -9,6 +9,12 @@ import UIKit
 import AVFoundation
 
 class ViewController: UIViewController {
+    // Constraints values declared as constants
+    private let minimumCellSpacing: CGFloat = .zero
+    private let topBarHeight: CGFloat = 50
+    private let bottomBarHeight: CGFloat = 56
+    private let videoCellIdentifier = "VideoCell"
+    
     private var isGlobalMute: Bool = true
     
     private var videoURLs: [String] = [
@@ -17,12 +23,6 @@ class ViewController: UIViewController {
         "https://zshorts-dev.zee5.com/zshorts/file3/index.m3u8",
         "https://zshorts-dev.zee5.com/zshorts/file4/index.m3u8",
         "https://zshorts-dev.zee5.com/zshorts/file5/index.m3u8",]
-        
-    // Constraints values declared as constants
-    private let minimumCellSpacing: CGFloat = .zero
-    private let topBarHeight: CGFloat = 50
-    private let bottomBarHeight: CGFloat = 56
-    private let videoCellIdentifier = "VideoCell"
     
     private lazy var topBar: UIView = {
         let view = UIView()
@@ -136,7 +136,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
     }
     
     func didToggleMuteState(for cell: VideoCollectionViewCell) {
-        // Update global mute state, so that whenever next cells, they use this mute state
+        // Update global mute state, so that whenever next cells is displayed, they use this mute state
         isGlobalMute.toggle()
     }
 }
