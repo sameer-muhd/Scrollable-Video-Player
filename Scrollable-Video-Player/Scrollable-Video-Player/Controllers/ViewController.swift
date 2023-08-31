@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     private let bottomBarHeight: CGFloat = 56
     private let videoCellIdentifier = "VideoCell"
     
-    private var isGlobalMute: Bool = true
+    private var isGlobalMute: Bool = false
     
     private var videoURLs: [String] = [
         "https://zshorts-dev.zee5.com/zshorts/file1/index.m3u8",

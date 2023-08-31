@@ -42,6 +42,10 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private let subtitleLabelWeight = UIFont.Weight.regular
     
     // Constraints declared as constants
+    private let progressBarHeight: CGFloat = 4
+    private let videoPlayButtonWidth: CGFloat = 60
+    private let videoPlayButtonHeight: CGFloat = 60
+    
     private let optionsContainerOffsetFromBottom: CGFloat = -24
     private let optionsContainerOffsetFromTrailing: CGFloat = -24
     private let optionsContainerWidth: CGFloat = 42
@@ -71,10 +75,10 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private let topComponentsWidth: CGFloat = 30
     private let topComponentsHeight: CGFloat = 30
     
-    // Delegate used communicate to controller, used to set global mute state
+    // Delegate used to communicate with controller, used to set global mute state
     weak var globalMuteStateDelegate: VideoCellDelegate?
     
-    // Background views and layers - Player container, player layer, play button, progress bar and gradient layer
+    // Background views and layers - Player container, AV Player, player layer, play button, progress bar and gradient layer
     private lazy var playerContainerView: UIView = {
         let playerView = UIView()
         playerView.backgroundColor = .clear
@@ -94,20 +98,22 @@ class VideoCollectionViewCell: UICollectionViewCell {
         
         return playBtn
     }()
-    private var progressUpdateTimer: Timer?
-    private var isVideoLoaded = false
     
     private lazy var progressView: UIProgressView = {
         let progressView = UIProgressView(progressViewStyle: .default)
+        
         progressView.progressTintColor = .progressFilled
         progressView.trackTintColor =  .progressEmpty
+        
         return progressView
     }()
     
+    private var progressUpdateTimer: Timer?
+    
     private lazy var gradientLayer: CAGradientLayer = {
         let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
         
+        gradientLayer.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 1)
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 0)
         gradientLayer.locations = [0.0, 0.5]
@@ -258,9 +264,6 @@ class VideoCollectionViewCell: UICollectionViewCell {
     }
     
     private func commonInit() {
-        player = AVPlayer()
-        playerLayer = AVPlayerLayer(player: player)
-        playerLayer?.videoGravity = .resizeAspectFill
         
         addBackgroundComponents()
         addOptionsComponents()
@@ -268,25 +271,61 @@ class VideoCollectionViewCell: UICollectionViewCell {
         addTopComponents()
         
         addVolumeButtonAction()
+        addPlayerTappedAction()
     }
     
     private func addBackgroundComponents() {
-        if let playerLayer = playerLayer {
-            playerContainerView.layer.addSublayer(playerLayer)
-        }
+        // Need to add player container view, player layer, gradient layer, play button and progress bar view
+        player = AVPlayer()
+        playerLayer = AVPlayerLayer(player: player)
+        playerLayer!.videoGravity = .resizeAspectFill
+        playerContainerView.layer.addSublayer(playerLayer!)
         
         contentView.addSubview(playerContainerView)
         contentView.layer.addSublayer(gradientLayer)
         contentView.addSubview(playButton)
-        
-        progressView.frame = CGRect(x: 0, y: contentView.frame.height - 4, width: contentView.frame.width, height: 4)
         contentView.addSubview(progressView)
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(videoViewTapped))
-        playerContainerView.addGestureRecognizer(tapGesture)
+        NSLayoutConstraint.activate([
+            // Player container constraints
+            playerContainerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            playerContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            playerContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            playerContainerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+        ])
+        playerLayer?.frame = contentView.bounds
         
         gradientLayer.position = contentView.center
         gradientLayer.frame = contentView.bounds
+        
+        playButton.frame = CGRect(x: 0, y: 0, width: videoPlayButtonWidth, height: videoPlayButtonHeight)
+        playButton.center = contentView.center
+        
+        progressView.frame = CGRect(x: 0, y: contentView.frame.height - progressBarHeight, width: contentView.frame.width, height: progressBarHeight)
+    }
+    
+    private func addPlayerTappedAction() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(videoViewTapped))
+        playerContainerView.addGestureRecognizer(tapGesture)
+        playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func playButtonTapped() {
+        videoViewTapped()
+    }
+    
+    @objc func videoViewTapped() {
+        if let player = player {
+            if player.rate != 0 {
+                // Video is playing, pause it
+                player.pause()
+                playButton.isHidden = false
+            } else {
+                // Video is paused, play it
+                player.play()
+                playButton.isHidden = true
+            }
+        }
     }
     
     private func addOptionsComponents() {
@@ -350,33 +389,12 @@ class VideoCollectionViewCell: UICollectionViewCell {
         // Release the player and any associated resources
         player?.pause()
         playButton.isHidden = true
-        isVideoLoaded = false
     }
     
     func configureVideoPlayer(with videoURL: String) {
         player?.replaceCurrentItem(with: AVPlayerItem(url: URL(string: videoURL)!))
         player?.pause()
-    }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        playerLayer?.frame = contentView.bounds
-        gradientLayer.frame = contentView.bounds
-        gradientLayer.position = contentView.center
-        
-        playButton.frame = CGRect(x: 0, y: 0, width: 60, height: 60)
-        playButton.center = contentView.center
-        playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
-        
-        NSLayoutConstraint.activate([
-            // Player container constraints
-            playerContainerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            playerContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            playerContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            playerContainerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-        ])
-    }
             
     private func addTextComponents() {
         textContainer.addSubview(titleLabel)
@@ -443,24 +461,6 @@ class VideoCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    @objc func playButtonTapped() {
-        videoViewTapped()
-    }
-    
-    @objc func videoViewTapped() {
-        if let player = player {
-            if player.rate != 0 {
-                // Video is playing, pause it
-                player.pause()
-                playButton.isHidden = false
-            } else {
-                // Video is paused, play it
-                player.play()
-                playButton.isHidden = true
-            }
-        }
-    }
-    
     func updateProgress() {
         guard let player = player, let currentItem = player.currentItem else { return }
         
@@ -480,28 +480,22 @@ class VideoCollectionViewCell: UICollectionViewCell {
             volumeButton.setImage(UIImage(named: volumeLoudImg), for: .normal)
         }
         
-        if !isVideoLoaded {
-            isVideoLoaded = true
-            playButton.isHidden = true
-            player?.seek(to: .zero)
-            player?.play()
-            NotificationCenter.default.addObserver(self, selector: #selector(videoDidFinishPlaying(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
-            
-            progressUpdateTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in
-                self?.updateProgress()
-            }
+        playButton.isHidden = true
+        player?.seek(to: .zero)
+        player?.play()
+        NotificationCenter.default.addObserver(self, selector: #selector(videoDidFinishPlaying(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+        
+        progressUpdateTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in
+            self?.updateProgress()
         }
     }
     
     func pauseVideoPlayback() {
-        if isVideoLoaded {
-            isVideoLoaded = false
-            player?.pause()
-            playButton.isHidden = false
-            NotificationCenter.default.removeObserver(self)
-            progressUpdateTimer?.invalidate()
-            progressUpdateTimer = nil
-        }
+        player?.pause()
+        playButton.isHidden = false
+        NotificationCenter.default.removeObserver(self)
+        progressUpdateTimer?.invalidate()
+        progressUpdateTimer = nil
     }
     
     @objc func videoDidFinishPlaying(_ notification: Notification) {
@@ -511,5 +505,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+        progressUpdateTimer?.invalidate()
+        progressUpdateTimer = nil
     }
 }
