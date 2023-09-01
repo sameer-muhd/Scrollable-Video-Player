@@ -25,6 +25,8 @@
 		462F3E8D2A8CD2FB0006C96C /* NotoSans-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E7A2A8CD2FA0006C96C /* NotoSans-ThinItalic.ttf */; };
 		462F3E8E2A8CD2FB0006C96C /* NotoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E7B2A8CD2FA0006C96C /* NotoSans-Regular.ttf */; };
 		462F3E902A8CD2FB0006C96C /* NotoSans-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E7D2A8CD2FA0006C96C /* NotoSans-SemiBoldItalic.ttf */; };
+		462F3E942AA1B3D60006C96C /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462F3E932AA1B3D60006C96C /* Asset.swift */; };
+		462F3E962AA1B5560006C96C /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462F3E952AA1B5560006C96C /* NetworkManager.swift */; };
 		465BBD1C2A8A07C000700683 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465BBD1B2A8A07C000700683 /* AppDelegate.swift */; };
 		465BBD1E2A8A07C000700683 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465BBD1D2A8A07C000700683 /* SceneDelegate.swift */; };
 		465BBD202A8A07C000700683 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465BBD1F2A8A07C000700683 /* ViewController.swift */; };
@@ -74,6 +76,8 @@
 		462F3E7A2A8CD2FA0006C96C /* NotoSans-ThinItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-ThinItalic.ttf"; sourceTree = "<group>"; };
 		462F3E7B2A8CD2FA0006C96C /* NotoSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Regular.ttf"; sourceTree = "<group>"; };
 		462F3E7D2A8CD2FA0006C96C /* NotoSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		462F3E932AA1B3D60006C96C /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
+		462F3E952AA1B5560006C96C /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		465BBD182A8A07C000700683 /* Scrollable-Video-Player.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Scrollable-Video-Player.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		465BBD1B2A8A07C000700683 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		465BBD1D2A8A07C000700683 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -116,6 +120,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		462F3E912AA1B2720006C96C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				462F3E932AA1B3D60006C96C /* Asset.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		462F3E922AA1B28D0006C96C /* NetworkManager */ = {
+			isa = PBXGroup;
+			children = (
+				462F3E952AA1B5560006C96C /* NetworkManager.swift */,
+			);
+			path = NetworkManager;
+			sourceTree = "<group>";
+		};
 		465BBD0F2A8A07C000700683 = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +159,8 @@
 		465BBD1A2A8A07C000700683 /* Scrollable-Video-Player */ = {
 			isa = PBXGroup;
 			children = (
+				462F3E922AA1B28D0006C96C /* NetworkManager */,
+				462F3E912AA1B2720006C96C /* Models */,
 				465BBD562A8CD0F600700683 /* Resources */,
 				465BBD532A8A35FC00700683 /* Extensions */,
 				465BBD502A8A255200700683 /* Views */,
@@ -376,8 +398,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				465BBD202A8A07C000700683 /* ViewController.swift in Sources */,
+				462F3E942AA1B3D60006C96C /* Asset.swift in Sources */,
 				465BBD552A8A361400700683 /* Extensions.swift in Sources */,
 				465BBD262A8A07C000700683 /* Scrollable_Video_Player.xcdatamodeld in Sources */,
+				462F3E962AA1B5560006C96C /* NetworkManager.swift in Sources */,
 				465BBD1C2A8A07C000700683 /* AppDelegate.swift in Sources */,
 				465BBD522A8A257600700683 /* VideoCollectionViewCell.swift in Sources */,
 				465BBD1E2A8A07C000700683 /* SceneDelegate.swift in Sources */,

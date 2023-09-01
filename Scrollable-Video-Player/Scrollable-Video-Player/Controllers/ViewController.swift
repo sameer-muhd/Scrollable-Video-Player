@@ -89,8 +89,13 @@ class ViewController: UIViewController {
         return volumeBtn
     }()
     
+    let networkManager = NetworkManager.shared
+    var assetDetails: [Asset] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        fetchDataFromAPI()
         
         setupTopBar()
         setupBottomBar()
@@ -98,6 +103,22 @@ class ViewController: UIViewController {
         addTopComponents()
         
         addVolumeButtonAction()
+    }
+    
+    private func fetchDataFromAPI() {
+        networkManager.fetchVideos { [weak self] (assets, error) in
+            if let error = error {
+                print("Error fetching videos: \(error)")
+                return
+            }
+
+            if let assets = assets {
+                DispatchQueue.main.async {
+                    self?.assetDetails = assets
+                    self?.collectionView.reloadData()
+                }
+            }
+        }
     }
     
     private func setupCollectionView() {
@@ -176,7 +197,7 @@ class ViewController: UIViewController {
 
 extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return videoURLs.count
+        return assetDetails.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -184,8 +205,8 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
             return UICollectionViewCell()
         }
         
-        let videoURL = videoURLs[indexPath.item]
-        cell.configureVideoPlayer(with: videoURL)
+        let currentAsset = assetDetails[indexPath.item]
+        cell.configureVideoPlayer(with: currentAsset)
         
         return cell
     }
