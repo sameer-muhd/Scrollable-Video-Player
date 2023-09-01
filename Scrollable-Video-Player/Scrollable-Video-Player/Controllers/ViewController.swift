@@ -114,6 +114,22 @@ class ViewController: UIViewController {
         }
     }
     
+    private func fetchDataFromAPI() {
+        networkManager.fetchVideos { [weak self] (assets, error) in
+            if let error = error {
+                print("Error fetching videos: \(error)")
+                return
+            }
+
+            if let assets = assets {
+                DispatchQueue.main.async {
+                    self?.assetDetails = assets
+                    self?.collectionView.reloadData()
+                }
+            }
+        }
+    }
+    
     private func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -198,6 +214,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
             return UICollectionViewCell()
         }
         
+        cell.globalMuteStateDelegate = self
         let currentAsset = assetDetails[indexPath.item]
         cell.configureVideoPlayer(with: currentAsset)
         
