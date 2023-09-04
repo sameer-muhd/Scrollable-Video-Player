@@ -107,7 +107,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: videoCellIdentifier, for: indexPath) as? VideoCollectionViewCell else {
-            return VideoCollectionViewCell()
+            return UICollectionViewCell()
         }
         
         cell.globalMuteStateDelegate = self
