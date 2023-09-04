@@ -7,6 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		462F3E7E2A8CD2FB0006C96C /* NotoSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E6B2A8CD2FA0006C96C /* NotoSans-ExtraBold.ttf */; };
+		462F3E7F2A8CD2FB0006C96C /* NotoSans-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E6C2A8CD2FA0006C96C /* NotoSans-ExtraLightItalic.ttf */; };
+		462F3E802A8CD2FB0006C96C /* NotoSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E6D2A8CD2FA0006C96C /* NotoSans-Light.ttf */; };
+		462F3E812A8CD2FB0006C96C /* NotoSans-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E6E2A8CD2FA0006C96C /* NotoSans-BlackItalic.ttf */; };
+		462F3E822A8CD2FB0006C96C /* NotoSans-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E6F2A8CD2FA0006C96C /* NotoSans-MediumItalic.ttf */; };
+		462F3E832A8CD2FB0006C96C /* NotoSans-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E702A8CD2FA0006C96C /* NotoSans-ExtraBoldItalic.ttf */; };
+		462F3E842A8CD2FB0006C96C /* NotoSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E712A8CD2FA0006C96C /* NotoSans-BoldItalic.ttf */; };
+		462F3E852A8CD2FB0006C96C /* NotoSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E722A8CD2FA0006C96C /* NotoSans-Italic.ttf */; };
+		462F3E862A8CD2FB0006C96C /* NotoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E732A8CD2FA0006C96C /* NotoSans-Bold.ttf */; };
+		462F3E872A8CD2FB0006C96C /* NotoSans-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E742A8CD2FA0006C96C /* NotoSans-Thin.ttf */; };
+		462F3E882A8CD2FB0006C96C /* NotoSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E752A8CD2FA0006C96C /* NotoSans-Medium.ttf */; };
+		462F3E892A8CD2FB0006C96C /* NotoSans-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E762A8CD2FA0006C96C /* NotoSans-ExtraLight.ttf */; };
+		462F3E8A2A8CD2FB0006C96C /* NotoSans-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E772A8CD2FA0006C96C /* NotoSans-Black.ttf */; };
+		462F3E8B2A8CD2FB0006C96C /* NotoSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E782A8CD2FA0006C96C /* NotoSans-SemiBold.ttf */; };
+		462F3E8C2A8CD2FB0006C96C /* NotoSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E792A8CD2FA0006C96C /* NotoSans-LightItalic.ttf */; };
+		462F3E8D2A8CD2FB0006C96C /* NotoSans-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E7A2A8CD2FA0006C96C /* NotoSans-ThinItalic.ttf */; };
+		462F3E8E2A8CD2FB0006C96C /* NotoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E7B2A8CD2FA0006C96C /* NotoSans-Regular.ttf */; };
+		462F3E902A8CD2FB0006C96C /* NotoSans-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 462F3E7D2A8CD2FA0006C96C /* NotoSans-SemiBoldItalic.ttf */; };
 		465BBD1C2A8A07C000700683 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465BBD1B2A8A07C000700683 /* AppDelegate.swift */; };
 		465BBD1E2A8A07C000700683 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465BBD1D2A8A07C000700683 /* SceneDelegate.swift */; };
 		465BBD202A8A07C000700683 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465BBD1F2A8A07C000700683 /* ViewController.swift */; };
@@ -16,6 +34,8 @@
 		465BBD362A8A07C100700683 /* Scrollable_Video_PlayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465BBD352A8A07C100700683 /* Scrollable_Video_PlayerTests.swift */; };
 		465BBD402A8A07C100700683 /* Scrollable_Video_PlayerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465BBD3F2A8A07C100700683 /* Scrollable_Video_PlayerUITests.swift */; };
 		465BBD422A8A07C100700683 /* Scrollable_Video_PlayerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465BBD412A8A07C100700683 /* Scrollable_Video_PlayerUITestsLaunchTests.swift */; };
+		465BBD522A8A257600700683 /* VideoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465BBD512A8A257600700683 /* VideoCollectionViewCell.swift */; };
+		465BBD552A8A361400700683 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465BBD542A8A361400700683 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +56,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		462F3E6B2A8CD2FA0006C96C /* NotoSans-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-ExtraBold.ttf"; sourceTree = "<group>"; };
+		462F3E6C2A8CD2FA0006C96C /* NotoSans-ExtraLightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
+		462F3E6D2A8CD2FA0006C96C /* NotoSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Light.ttf"; sourceTree = "<group>"; };
+		462F3E6E2A8CD2FA0006C96C /* NotoSans-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-BlackItalic.ttf"; sourceTree = "<group>"; };
+		462F3E6F2A8CD2FA0006C96C /* NotoSans-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-MediumItalic.ttf"; sourceTree = "<group>"; };
+		462F3E702A8CD2FA0006C96C /* NotoSans-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		462F3E712A8CD2FA0006C96C /* NotoSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-BoldItalic.ttf"; sourceTree = "<group>"; };
+		462F3E722A8CD2FA0006C96C /* NotoSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Italic.ttf"; sourceTree = "<group>"; };
+		462F3E732A8CD2FA0006C96C /* NotoSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Bold.ttf"; sourceTree = "<group>"; };
+		462F3E742A8CD2FA0006C96C /* NotoSans-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Thin.ttf"; sourceTree = "<group>"; };
+		462F3E752A8CD2FA0006C96C /* NotoSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Medium.ttf"; sourceTree = "<group>"; };
+		462F3E762A8CD2FA0006C96C /* NotoSans-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-ExtraLight.ttf"; sourceTree = "<group>"; };
+		462F3E772A8CD2FA0006C96C /* NotoSans-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Black.ttf"; sourceTree = "<group>"; };
+		462F3E782A8CD2FA0006C96C /* NotoSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-SemiBold.ttf"; sourceTree = "<group>"; };
+		462F3E792A8CD2FA0006C96C /* NotoSans-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-LightItalic.ttf"; sourceTree = "<group>"; };
+		462F3E7A2A8CD2FA0006C96C /* NotoSans-ThinItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-ThinItalic.ttf"; sourceTree = "<group>"; };
+		462F3E7B2A8CD2FA0006C96C /* NotoSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Regular.ttf"; sourceTree = "<group>"; };
+		462F3E7D2A8CD2FA0006C96C /* NotoSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		465BBD182A8A07C000700683 /* Scrollable-Video-Player.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Scrollable-Video-Player.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		465BBD1B2A8A07C000700683 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		465BBD1D2A8A07C000700683 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -49,6 +87,8 @@
 		465BBD3B2A8A07C100700683 /* Scrollable-Video-PlayerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Scrollable-Video-PlayerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		465BBD3F2A8A07C100700683 /* Scrollable_Video_PlayerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scrollable_Video_PlayerUITests.swift; sourceTree = "<group>"; };
 		465BBD412A8A07C100700683 /* Scrollable_Video_PlayerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scrollable_Video_PlayerUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		465BBD512A8A257600700683 /* VideoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCollectionViewCell.swift; sourceTree = "<group>"; };
+		465BBD542A8A361400700683 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,9 +139,12 @@
 		465BBD1A2A8A07C000700683 /* Scrollable-Video-Player */ = {
 			isa = PBXGroup;
 			children = (
+				465BBD562A8CD0F600700683 /* Resources */,
+				465BBD532A8A35FC00700683 /* Extensions */,
+				465BBD502A8A255200700683 /* Views */,
+				465BBD4F2A8A254500700683 /* Controllers */,
 				465BBD1B2A8A07C000700683 /* AppDelegate.swift */,
 				465BBD1D2A8A07C000700683 /* SceneDelegate.swift */,
-				465BBD1F2A8A07C000700683 /* ViewController.swift */,
 				465BBD272A8A07C100700683 /* Assets.xcassets */,
 				465BBD292A8A07C100700683 /* LaunchScreen.storyboard */,
 				465BBD2C2A8A07C100700683 /* Info.plist */,
@@ -125,6 +168,63 @@
 				465BBD412A8A07C100700683 /* Scrollable_Video_PlayerUITestsLaunchTests.swift */,
 			);
 			path = "Scrollable-Video-PlayerUITests";
+			sourceTree = "<group>";
+		};
+		465BBD4F2A8A254500700683 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				465BBD1F2A8A07C000700683 /* ViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		465BBD502A8A255200700683 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				465BBD512A8A257600700683 /* VideoCollectionViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		465BBD532A8A35FC00700683 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				465BBD542A8A361400700683 /* Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		465BBD562A8CD0F600700683 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				465BBD572A8CD0FD00700683 /* Fonts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		465BBD572A8CD0FD00700683 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				462F3E772A8CD2FA0006C96C /* NotoSans-Black.ttf */,
+				462F3E6E2A8CD2FA0006C96C /* NotoSans-BlackItalic.ttf */,
+				462F3E732A8CD2FA0006C96C /* NotoSans-Bold.ttf */,
+				462F3E712A8CD2FA0006C96C /* NotoSans-BoldItalic.ttf */,
+				462F3E6B2A8CD2FA0006C96C /* NotoSans-ExtraBold.ttf */,
+				462F3E702A8CD2FA0006C96C /* NotoSans-ExtraBoldItalic.ttf */,
+				462F3E762A8CD2FA0006C96C /* NotoSans-ExtraLight.ttf */,
+				462F3E6C2A8CD2FA0006C96C /* NotoSans-ExtraLightItalic.ttf */,
+				462F3E722A8CD2FA0006C96C /* NotoSans-Italic.ttf */,
+				462F3E6D2A8CD2FA0006C96C /* NotoSans-Light.ttf */,
+				462F3E792A8CD2FA0006C96C /* NotoSans-LightItalic.ttf */,
+				462F3E752A8CD2FA0006C96C /* NotoSans-Medium.ttf */,
+				462F3E6F2A8CD2FA0006C96C /* NotoSans-MediumItalic.ttf */,
+				462F3E7B2A8CD2FA0006C96C /* NotoSans-Regular.ttf */,
+				462F3E782A8CD2FA0006C96C /* NotoSans-SemiBold.ttf */,
+				462F3E7D2A8CD2FA0006C96C /* NotoSans-SemiBoldItalic.ttf */,
+				462F3E742A8CD2FA0006C96C /* NotoSans-Thin.ttf */,
+				462F3E7A2A8CD2FA0006C96C /* NotoSans-ThinItalic.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -231,8 +331,26 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				462F3E8E2A8CD2FB0006C96C /* NotoSans-Regular.ttf in Resources */,
 				465BBD2B2A8A07C100700683 /* LaunchScreen.storyboard in Resources */,
+				462F3E8A2A8CD2FB0006C96C /* NotoSans-Black.ttf in Resources */,
+				462F3E8B2A8CD2FB0006C96C /* NotoSans-SemiBold.ttf in Resources */,
+				462F3E892A8CD2FB0006C96C /* NotoSans-ExtraLight.ttf in Resources */,
+				462F3E802A8CD2FB0006C96C /* NotoSans-Light.ttf in Resources */,
+				462F3E822A8CD2FB0006C96C /* NotoSans-MediumItalic.ttf in Resources */,
+				462F3E862A8CD2FB0006C96C /* NotoSans-Bold.ttf in Resources */,
+				462F3E882A8CD2FB0006C96C /* NotoSans-Medium.ttf in Resources */,
+				462F3E842A8CD2FB0006C96C /* NotoSans-BoldItalic.ttf in Resources */,
+				462F3E7F2A8CD2FB0006C96C /* NotoSans-ExtraLightItalic.ttf in Resources */,
+				462F3E852A8CD2FB0006C96C /* NotoSans-Italic.ttf in Resources */,
 				465BBD282A8A07C100700683 /* Assets.xcassets in Resources */,
+				462F3E8C2A8CD2FB0006C96C /* NotoSans-LightItalic.ttf in Resources */,
+				462F3E832A8CD2FB0006C96C /* NotoSans-ExtraBoldItalic.ttf in Resources */,
+				462F3E7E2A8CD2FB0006C96C /* NotoSans-ExtraBold.ttf in Resources */,
+				462F3E872A8CD2FB0006C96C /* NotoSans-Thin.ttf in Resources */,
+				462F3E8D2A8CD2FB0006C96C /* NotoSans-ThinItalic.ttf in Resources */,
+				462F3E812A8CD2FB0006C96C /* NotoSans-BlackItalic.ttf in Resources */,
+				462F3E902A8CD2FB0006C96C /* NotoSans-SemiBoldItalic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,8 +376,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				465BBD202A8A07C000700683 /* ViewController.swift in Sources */,
+				465BBD552A8A361400700683 /* Extensions.swift in Sources */,
 				465BBD262A8A07C000700683 /* Scrollable_Video_Player.xcdatamodeld in Sources */,
 				465BBD1C2A8A07C000700683 /* AppDelegate.swift in Sources */,
+				465BBD522A8A257600700683 /* VideoCollectionViewCell.swift in Sources */,
 				465BBD1E2A8A07C000700683 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -358,7 +478,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -412,7 +532,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
