@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 import AVFoundation
 
 class ViewController: UIViewController {
@@ -216,7 +217,8 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
         
         cell.globalMuteStateDelegate = self
         let currentAsset = assetDetails[indexPath.item]
-        cell.configureVideoPlayer(with: currentAsset)
+        let videoID = currentAsset.videoDetails.id
+        cell.configureVideoPlayer(with: currentAsset, watchListState: isAddedToWatchList(videoID: videoID))
         
         return cell
     }
@@ -237,5 +239,69 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
         let itemWidth = collectionView.bounds.width
         let itemHeight = collectionView.bounds.height
         return CGSize(width: itemWidth, height: itemHeight)
+    }
+    
+    func didToggleMuteState(for cell: VideoCollectionViewCell) {
+        // Update global mute state, so that whenever next cells is displayed, they use this mute state
+        isGlobalMute.toggle()
+    }
+    
+    func didToggleWatchListState(for cell: VideoCollectionViewCell, videoID: String) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let watchListEntity = NSEntityDescription.entity(forEntityName: "WatchList", in: managedContext)!
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "WatchList")
+        fetchRequest.predicate = NSPredicate(format: "videoID == %@", videoID)
+
+        do {
+            let matchingVideos = try managedContext.fetch(fetchRequest)
+            if let video = matchingVideos.first {
+                // The video with the specified videoID is in Core Data
+                // Since it already in Core Data, we removed it and change watchlist button image to default
+                
+                managedContext.delete(video as! NSManagedObject)
+                try managedContext.save()
+                
+                cell.updateWatchListButtonState(isVideoAdded: false)
+                print("Removed video with ID: \(videoID)")
+            } else {
+                // The video is not in Core Data
+                // Since it is not in Core Data, we add it and change watchlist button image to added
+                
+                let video = NSManagedObject(entity: watchListEntity, insertInto: managedContext)
+                video.setValue(videoID, forKey: "videoID")
+                try managedContext.save()
+                
+                cell.updateWatchListButtonState(isVideoAdded: true)
+                print("Added video with ID: \(videoID)")
+            }
+        } catch {
+            print("Error in Core Data: \(error)")
+        }
+    }
+    
+    private func isAddedToWatchList(videoID: String) -> Bool {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return false }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "WatchList")
+        fetchRequest.predicate = NSPredicate(format: "videoID == %@", videoID)
+
+        do {
+            let matchingVideos = try managedContext.fetch(fetchRequest)
+            if matchingVideos.first != nil {
+                return true
+            } else {
+                return false
+            }
+        } catch {
+            print("Error in Core Data: \(error)")
+        }
+        
+        return false
     }
 }
