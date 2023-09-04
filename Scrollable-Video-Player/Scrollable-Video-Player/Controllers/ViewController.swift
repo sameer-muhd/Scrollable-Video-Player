@@ -28,13 +28,6 @@ class ViewController: UIViewController {
     
     private var isGlobalMute: Bool = false
     
-    private var videoURLs: [String] = [
-        "https://zshorts-dev.zee5.com/zshorts/file1/index.m3u8",
-        "https://zshorts-dev.zee5.com/zshorts/file2/index.m3u8",
-        "https://zshorts-dev.zee5.com/zshorts/file3/index.m3u8",
-        "https://zshorts-dev.zee5.com/zshorts/file4/index.m3u8",
-        "https://zshorts-dev.zee5.com/zshorts/file5/index.m3u8",]
-    
     private lazy var topBar: UIView = {
         let view = UIView()
         view.backgroundColor = .surfacePrimary
@@ -88,9 +81,9 @@ class ViewController: UIViewController {
         
         return volumeBtn
     }()
-    
-    let networkManager = NetworkManager.shared
-    var assetDetails: [Asset] = []
+
+    private let networkManager = NetworkManager.shared
+    private var assetDetails: [Asset] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
