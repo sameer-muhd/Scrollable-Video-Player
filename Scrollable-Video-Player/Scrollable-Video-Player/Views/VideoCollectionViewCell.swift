@@ -8,20 +8,12 @@
 import UIKit
 import AVFoundation
 
-// Protocol delegate method used to set global mute/unmute state of cells
-protocol VideoCellDelegate: AnyObject {
-    func didToggleMuteState(for cell: VideoCollectionViewCell)
-}
-
 class VideoCollectionViewCell: UICollectionViewCell {
     // Image assets declared as constants
     private let playButtonImg = "playButton"
     private let addToListImg = "addToList"
     private let addToListSelectedImg = "addToListSelected"
     private let shareButtonImg = "shareButton"
-    private let backButtonImg = "ChevronLeft"
-    private let volumeLoudImg = "VolumeLoud"
-    private let volumeMuteImg = "VolumeMute"
     private let playButtonVideoImg = "playButtonVideo"
 
     // Options and title labels declared as constants
@@ -67,16 +59,6 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     private let subtitleLabelOffsetFromLeading: CGFloat = 24
     private let subtitleLabelHeight: CGFloat = 16
-    
-    private let topComponentsOffsetFromTop: CGFloat = 16
-    private let topComponentOffsetFromLeading: CGFloat = 16
-    private let topComponentsOffsetFromTrailing: CGFloat = -24
-    
-    private let topComponentsWidth: CGFloat = 30
-    private let topComponentsHeight: CGFloat = 30
-    
-    // Delegate used to communicate with controller, used to set global mute state
-    weak var globalMuteStateDelegate: VideoCellDelegate?
     
     // Background views and layers - Player container, AV Player, player layer, play button, progress bar and gradient layer
     private lazy var playerContainerView: UIView = {
@@ -230,28 +212,6 @@ class VideoCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    // Backbutton and volume button
-    private lazy var backButton: UIButton = {
-        let backBtn = UIButton(type: .custom)
-        
-        backBtn.setImage(UIImage(named: backButtonImg), for: .normal)
-        backBtn.imageView?.contentMode = .scaleToFill
-        backBtn.translatesAutoresizingMaskIntoConstraints = false
-        
-        return backBtn
-    }()
-    
-    private lazy var volumeButton: UIButton = {
-        let volumeBtn = UIButton(type: .custom)
-        
-        volumeBtn.setImage(UIImage(named: volumeLoudImg), for: .normal)
-        volumeBtn.imageView?.contentMode = .scaleToFill
-        volumeBtn.adjustsImageWhenHighlighted = false
-        volumeBtn.translatesAutoresizingMaskIntoConstraints = false
-        
-        return volumeBtn
-    }()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -268,9 +228,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         addBackgroundComponents()
         addOptionsComponents()
         addTextComponents()
-        addTopComponents()
         
-        addVolumeButtonAction()
         addPlayerTappedAction()
     }
     
@@ -423,44 +381,6 @@ class VideoCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    private func addTopComponents() {
-        contentView.addSubview(backButton)
-        contentView.addSubview(volumeButton)
-        
-        NSLayoutConstraint.activate([
-            // Back button constraints
-            backButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topComponentsOffsetFromTop),
-            backButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: topComponentOffsetFromLeading),
-            backButton.widthAnchor.constraint(equalToConstant: topComponentsWidth),
-            backButton.heightAnchor.constraint(equalToConstant: topComponentsHeight),
-            
-            // Volume Button constraints
-            volumeButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topComponentsOffsetFromTop),
-            volumeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: topComponentsOffsetFromTrailing),
-            volumeButton.widthAnchor.constraint(equalToConstant: topComponentsWidth),
-            volumeButton.heightAnchor.constraint(equalToConstant: topComponentsHeight),
-        ])
-    }
-    
-    private func addVolumeButtonAction() {
-        volumeButton.addTarget(self, action: #selector(volumeButtonTapped), for: .touchUpInside)
-    }
-    
-    @objc private func volumeButtonTapped() {
-        // Check the current image of the button
-        if volumeButton.currentImage == UIImage(named: volumeLoudImg) {
-            // Change the image to a different image and mute the player
-            player?.isMuted = true
-            volumeButton.setImage(UIImage(named: volumeMuteImg), for: .normal)
-            globalMuteStateDelegate?.didToggleMuteState(for: self)
-        } else {
-            // Change the image back to the original image and unmute the player
-            player?.isMuted = false
-            volumeButton.setImage(UIImage(named: volumeLoudImg), for: .normal)
-            globalMuteStateDelegate?.didToggleMuteState(for: self)
-        }
-    }
-    
     func updateProgress() {
         guard let player = player, let currentItem = player.currentItem else { return }
         
@@ -474,19 +394,27 @@ class VideoCollectionViewCell: UICollectionViewCell {
     func startVideoPlayback(with isMuted: Bool) {
         if isMuted {
             player?.isMuted = true
-            volumeButton.setImage(UIImage(named: volumeMuteImg), for: .normal)
         } else {
             player?.isMuted = false
-            volumeButton.setImage(UIImage(named: volumeLoudImg), for: .normal)
         }
         
         playButton.isHidden = true
         player?.seek(to: .zero)
         player?.play()
+        // Notification used to restart the video once it ends
         NotificationCenter.default.addObserver(self, selector: #selector(videoDidFinishPlaying(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+        
+        // Notification used to change video mute state when button is pressed in view controller
+        NotificationCenter.default.addObserver(self, selector: #selector(updateMuteState), name: Notification.Name("MuteStateChanged"), object: nil)
         
         progressUpdateTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in
             self?.updateProgress()
+        }
+    }
+    
+    @objc func updateMuteState(_ notification: Notification) {
+        if let isMuted = notification.userInfo?["isMuted"] as? Bool {
+            player?.isMuted = isMuted
         }
     }
     

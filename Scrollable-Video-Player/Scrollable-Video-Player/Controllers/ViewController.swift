@@ -15,6 +15,17 @@ class ViewController: UIViewController {
     private let bottomBarHeight: CGFloat = 56
     private let videoCellIdentifier = "VideoCell"
     
+    private let backButtonImg = "ChevronLeft"
+    private let volumeLoudImg = "VolumeLoud"
+    private let volumeMuteImg = "VolumeMute"
+    
+    private let topComponentsOffsetFromTop: CGFloat = 16
+    private let topComponentOffsetFromLeading: CGFloat = 16
+    private let topComponentsOffsetFromTrailing: CGFloat = -24
+    
+    private let topComponentsWidth: CGFloat = 30
+    private let topComponentsHeight: CGFloat = 30
+    
     private var isGlobalMute: Bool = false
     
     private var videoURLs: [String] = [
@@ -55,12 +66,37 @@ class ViewController: UIViewController {
         return collectionView
     }()
     
+    // Backbutton and volume button
+    private lazy var backButton: UIButton = {
+        let backBtn = UIButton(type: .custom)
+        
+        backBtn.setImage(UIImage(named: backButtonImg), for: .normal)
+        backBtn.imageView?.contentMode = .scaleToFill
+        backBtn.translatesAutoresizingMaskIntoConstraints = false
+        
+        return backBtn
+    }()
+    
+    private lazy var volumeButton: UIButton = {
+        let volumeBtn = UIButton(type: .custom)
+        
+        volumeBtn.setImage(UIImage(named: volumeLoudImg), for: .normal)
+        volumeBtn.imageView?.contentMode = .scaleToFill
+        volumeBtn.adjustsImageWhenHighlighted = false
+        volumeBtn.translatesAutoresizingMaskIntoConstraints = false
+        
+        return volumeBtn
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupTopBar()
         setupBottomBar()
         setupCollectionView()
+        addTopComponents()
+        
+        addVolumeButtonAction()
     }
     
     private func setupCollectionView() {
@@ -98,9 +134,48 @@ class ViewController: UIViewController {
             bottomBar.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
+    
+    private func addTopComponents() {
+        view.addSubview(backButton)
+        view.addSubview(volumeButton)
+        
+        NSLayoutConstraint.activate([
+            // Back button constraints
+            backButton.topAnchor.constraint(equalTo: collectionView.topAnchor, constant: topComponentsOffsetFromTop),
+            backButton.leadingAnchor.constraint(equalTo: collectionView.leadingAnchor, constant: topComponentOffsetFromLeading),
+            backButton.widthAnchor.constraint(equalToConstant: topComponentsWidth),
+            backButton.heightAnchor.constraint(equalToConstant: topComponentsHeight),
+            
+            // Volume Button constraints
+            volumeButton.topAnchor.constraint(equalTo: collectionView.topAnchor, constant: topComponentsOffsetFromTop),
+            volumeButton.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor, constant: topComponentsOffsetFromTrailing),
+            volumeButton.widthAnchor.constraint(equalToConstant: topComponentsWidth),
+            volumeButton.heightAnchor.constraint(equalToConstant: topComponentsHeight),
+        ])
+    }
+    
+    private func addVolumeButtonAction() {
+        volumeButton.addTarget(self, action: #selector(volumeButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func volumeButtonTapped() {
+        // Check the current image of the button
+        if volumeButton.currentImage == UIImage(named: volumeLoudImg) {
+            // Change the image to a different image and update isGlobalMute
+            isGlobalMute = true
+            volumeButton.setImage(UIImage(named: volumeMuteImg), for: .normal)
+        } else {
+            // Change the image back to the original image and update isGlobalMute
+            isGlobalMute = false
+            volumeButton.setImage(UIImage(named: volumeLoudImg), for: .normal)
+        }
+        
+        // Send notification to cell to update the mute state
+        NotificationCenter.default.post(name: Notification.Name("MuteStateChanged"), object: nil, userInfo: ["isMuted": isGlobalMute])
+    }
 }
 
-extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, VideoCellDelegate {
+extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return videoURLs.count
     }
@@ -110,7 +185,6 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
             return UICollectionViewCell()
         }
         
-        cell.globalMuteStateDelegate = self
         let videoURL = videoURLs[indexPath.item]
         cell.configureVideoPlayer(with: videoURL)
         
@@ -133,10 +207,5 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
         let itemWidth = collectionView.bounds.width
         let itemHeight = collectionView.bounds.height
         return CGSize(width: itemWidth, height: itemHeight)
-    }
-    
-    func didToggleMuteState(for cell: VideoCollectionViewCell) {
-        // Update global mute state, so that whenever next cells is displayed, they use this mute state
-        isGlobalMute.toggle()
     }
 }
