@@ -81,6 +81,7 @@ class ViewController: UIViewController {
         let volumeBtn = UIButton(type: .custom)
         
         volumeBtn.setImage(UIImage(named: volumeLoudImg), for: .normal)
+        volumeBtn.setImage(UIImage(named: volumeMuteImg), for: .selected)
         volumeBtn.imageView?.contentMode = .scaleToFill
         volumeBtn.adjustsImageWhenHighlighted = false
         volumeBtn.translatesAutoresizingMaskIntoConstraints = false
@@ -159,16 +160,14 @@ class ViewController: UIViewController {
     }
     
     @objc private func volumeButtonTapped() {
-        // Check the current image of the button
-        if volumeButton.currentImage == UIImage(named: volumeLoudImg) {
-            // Change the image to a different image and update isGlobalMute
+        // Check the current state of button and toggle it
+        if !volumeButton.isSelected {
             isGlobalMute = true
-            volumeButton.setImage(UIImage(named: volumeMuteImg), for: .normal)
+            volumeButton.isSelected = true
         } else {
-            // Change the image back to the original image and update isGlobalMute
             isGlobalMute = false
-            volumeButton.setImage(UIImage(named: volumeLoudImg), for: .normal)
-        }
+            volumeButton.isSelected = false
+        }g
         
         // Send notification to cell to update the mute state
         NotificationCenter.default.post(name: Notification.Name("MuteStateChanged"), object: nil, userInfo: ["isMuted": isGlobalMute])
