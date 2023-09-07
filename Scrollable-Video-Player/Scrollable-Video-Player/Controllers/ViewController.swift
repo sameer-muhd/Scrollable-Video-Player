@@ -167,7 +167,7 @@ class ViewController: UIViewController {
         } else {
             isGlobalMute = false
             volumeButton.isSelected = false
-        }g
+        }
         
         // Send notification to cell to update the mute state
         NotificationCenter.default.post(name: Notification.Name("MuteStateChanged"), object: nil, userInfo: ["isMuted": isGlobalMute])
