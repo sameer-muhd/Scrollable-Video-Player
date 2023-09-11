@@ -420,7 +420,9 @@ class VideoCollectionViewCell: UICollectionViewCell {
         NotificationCenter.default.addObserver(self, selector: #selector(updateMuteState), name: Notification.Name("MuteStateChanged"), object: nil)
         
         progressUpdateTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] _ in
-            self?.updateProgress()
+            DispatchQueue.main.async {
+                self?.updateProgress()
+            }
         }
     }
     
