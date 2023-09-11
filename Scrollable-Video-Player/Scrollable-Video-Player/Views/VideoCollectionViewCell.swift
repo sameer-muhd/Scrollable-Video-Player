@@ -351,14 +351,19 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     func configureVideoPlayer(with asset: Asset) {
         print("Currently playing: ", asset)
-        let videoURL = asset.videoDetails.videoUri.avcUri
+        let videoURLString = asset.videoDetails.videoUri.avcUri
         let title = asset.videoDetails.title
         let description = asset.videoDetails.description
         
         titleLabel.text = title
         subtitleLabel.text = description
-        player?.replaceCurrentItem(with: AVPlayerItem(url: URL(string: videoURL)!))
-        player?.pause()
+        
+        if let videoURL = URL(string: videoURLString) {
+            player?.replaceCurrentItem(with: AVPlayerItem(url: videoURL))
+            player?.pause()
+        } else {
+            print("Error: Unable to use given URL")
+        }
     }
 
     private func addTextComponents() {
