@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class VideoCollectionViewCell: UICollectionViewCell {
     // Image assets declared as constants
@@ -13,10 +14,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private let addToListImg = "addToList"
     private let addToListSelectedImg = "addToListSelected"
     private let shareButtonImg = "shareButton"
-    private let backButtonImg = "ChevronLeft"
-    private let volumeLoudImg = "VolumeLoud"
-    private let volumeMuteImg = "VolumeMute"
-    private let backgroundImg = "TomHolland"
+    private let playButtonVideoImg = "playButtonVideo"
 
     // Options and title labels declared as constants
     private let watchButtonLabelText = "Watch"
@@ -36,6 +34,10 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private let subtitleLabelWeight = UIFont.Weight.regular
     
     // Constraints declared as constants
+    private let progressBarHeight: CGFloat = 4
+    private let videoPlayButtonWidth: CGFloat = 60
+    private let videoPlayButtonHeight: CGFloat = 60
+    
     private let optionsContainerOffsetFromBottom: CGFloat = -24
     private let optionsContainerOffsetFromTrailing: CGFloat = -24
     private let optionsContainerWidth: CGFloat = 42
@@ -58,25 +60,42 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private let subtitleLabelOffsetFromLeading: CGFloat = 24
     private let subtitleLabelHeight: CGFloat = 16
     
-    private let topComponentsOffsetFromTop: CGFloat = 16
-    private let topComponentOffsetFromLeading: CGFloat = 16
-    private let topComponentsOffsetFromTrailing: CGFloat = -24
-    
-    private let topComponentsWidth: CGFloat = 30
-    private let topComponentsHeight: CGFloat = 30
-    
-    // Background views and layers - Background image and gradient layer
-    private lazy var bgImage: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: backgroundImg))
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        return imageView
+    // Background views and layers - Player container, AV Player, player layer, play button, progress bar and gradient layer
+    private lazy var playerContainerView: UIView = {
+        let playerView = UIView()
+        playerView.backgroundColor = .clear
+        playerView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return playerView
     }()
+    
+    private var player: AVPlayer?
+    private var playerLayer: AVPlayerLayer?
+    
+    private lazy var playButton: UIButton = {
+        var playBtn = UIButton(type: .custom)
+        playBtn.setImage(UIImage(named: playButtonVideoImg), for: .normal)
+        playBtn.adjustsImageWhenHighlighted = false
+        playBtn.isHidden = true
+        
+        return playBtn
+    }()
+    
+    private lazy var progressView: UIProgressView = {
+        let progressView = UIProgressView(progressViewStyle: .default)
+        
+        progressView.progressTintColor = .progressFilled
+        progressView.trackTintColor =  .progressEmpty
+        
+        return progressView
+    }()
+    
+    private var progressUpdateTimer: Timer?
     
     private lazy var gradientLayer: CAGradientLayer = {
         let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
         
+        gradientLayer.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 1)
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 0)
         gradientLayer.locations = [0.0, 0.5]
@@ -117,6 +136,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     private lazy var addToPlaylistButton: UIButton = {
         let addBtn = UIButton(type: .custom)
+        
         addBtn.setImage(UIImage(named: addToListImg), for: .normal)
         addBtn.setImage(UIImage(named: addToListSelectedImg), for: .highlighted)
         addBtn.imageView?.contentMode = .scaleToFill
@@ -139,6 +159,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     private lazy var shareButton: UIButton = {
         let shareBtn = UIButton(type: .custom)
+        
         shareBtn.setImage(UIImage(named: shareButtonImg), for: .normal)
         shareBtn.adjustsImageWhenHighlighted = false
         shareBtn.imageView?.contentMode = .scaleToFill
@@ -169,6 +190,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
+        
         label.text = titleText
         label.numberOfLines = 2
         label.font = UIFont.notoSans(size: titleLabelSize, weight: titleLabelWeight)
@@ -180,6 +202,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     
     private lazy var subtitleLabel: UILabel = {
         let label = UILabel()
+        
         label.text = subtitleText
         label.numberOfLines = 1
         label.font = UIFont.notoSans(size: subtitleLabelSize, weight: subtitleLabelWeight)
@@ -189,48 +212,78 @@ class VideoCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    // Backbutton and volume button
-    private lazy var backButton: UIButton = {
-        let backBtn = UIButton(type: .custom)
-        backBtn.setImage(UIImage(named: backButtonImg), for: .normal)
-        backBtn.imageView?.contentMode = .scaleToFill
-        backBtn.translatesAutoresizingMaskIntoConstraints = false
-        
-        return backBtn
-    }()
-    
-    private lazy var volumeButton: UIButton = {
-        let volumeBtn = UIButton(type: .custom)
-        volumeBtn.setImage(UIImage(named: volumeLoudImg), for: .normal)
-        volumeBtn.imageView?.contentMode = .scaleToFill
-        volumeBtn.adjustsImageWhenHighlighted = false
-        volumeBtn.translatesAutoresizingMaskIntoConstraints = false
-        
-        return volumeBtn
-    }()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        commonInit()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func commonInit() {
         
         addBackgroundComponents()
         addOptionsComponents()
         addTextComponents()
-        addTopComponents()
         
-        addVolumeButtonAction()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        addPlayerTappedAction()
     }
     
     private func addBackgroundComponents() {
-        contentView.addSubview(bgImage)
+        // Need to add player container view, player layer, gradient layer, play button and progress bar view
+        player = AVPlayer()
+        playerLayer = AVPlayerLayer(player: player)
+        playerLayer!.videoGravity = .resizeAspectFill
+        playerContainerView.layer.addSublayer(playerLayer!)
+        
+        contentView.addSubview(playerContainerView)
         contentView.layer.addSublayer(gradientLayer)
+        contentView.addSubview(playButton)
+        contentView.addSubview(progressView)
+        
+        NSLayoutConstraint.activate([
+            // Player container constraints
+            playerContainerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            playerContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            playerContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            playerContainerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+        ])
+        playerLayer?.frame = contentView.bounds
         
         gradientLayer.position = contentView.center
-        bgImage.frame = contentView.bounds
         gradientLayer.frame = contentView.bounds
+        
+        playButton.frame = CGRect(x: 0, y: 0, width: videoPlayButtonWidth, height: videoPlayButtonHeight)
+        playButton.center = contentView.center
+        
+        progressView.frame = CGRect(x: 0, y: contentView.frame.height - progressBarHeight, width: contentView.frame.width, height: progressBarHeight)
+    }
+    
+    private func addPlayerTappedAction() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(videoViewTapped))
+        playerContainerView.addGestureRecognizer(tapGesture)
+        playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func playButtonTapped() {
+        videoViewTapped()
+    }
+    
+    @objc func videoViewTapped() {
+        if let player = player {
+            if player.rate != 0 {
+                // Video is playing, pause it
+                player.pause()
+                playButton.isHidden = false
+            } else {
+                // Video is paused, play it
+                player.play()
+                playButton.isHidden = true
+            }
+        }
     }
     
     private func addOptionsComponents() {
@@ -288,6 +341,19 @@ class VideoCollectionViewCell: UICollectionViewCell {
         ])
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        // Release the player and any associated resources
+        player?.pause()
+        playButton.isHidden = true
+    }
+    
+    func configureVideoPlayer(with videoURL: String) {
+        player?.replaceCurrentItem(with: AVPlayerItem(url: URL(string: videoURL)!))
+        player?.pause()
+    }
+
     private func addTextComponents() {
         textContainer.addSubview(titleLabel)
         textContainer.addSubview(subtitleLabel)
@@ -315,34 +381,59 @@ class VideoCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    private func addTopComponents() {
-        contentView.addSubview(backButton)
-        contentView.addSubview(volumeButton)
+    func updateProgress() {
+        guard let player = player, let currentItem = player.currentItem else { return }
         
-        NSLayoutConstraint.activate([
-            // Back button constraints
-            backButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topComponentsOffsetFromTop),
-            backButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: topComponentOffsetFromLeading),
-            backButton.widthAnchor.constraint(equalToConstant: topComponentsWidth),
-            backButton.heightAnchor.constraint(equalToConstant: topComponentsHeight),
-            
-            // Volume Button constraints
-            volumeButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topComponentsOffsetFromTop),
-            volumeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: topComponentsOffsetFromTrailing),
-            volumeButton.widthAnchor.constraint(equalToConstant: topComponentsWidth),
-            volumeButton.heightAnchor.constraint(equalToConstant: topComponentsHeight),
-        ])
+        let currentTime = CMTimeGetSeconds(player.currentTime())
+        let duration = CMTimeGetSeconds(currentItem.duration)
+        
+        let progress = Float(currentTime / duration)
+        progressView.progress = progress
     }
     
-    private func addVolumeButtonAction() {
-        volumeButton.addTarget(self, action: #selector(volumeButtonTapped), for: .touchUpInside)
-    }
-    
-    @objc private func volumeButtonTapped() {
-        if volumeButton.currentImage == UIImage(named: volumeLoudImg) {
-            volumeButton.setImage(UIImage(named: volumeMuteImg), for: .normal)
+    func startVideoPlayback(with isMuted: Bool) {
+        if isMuted {
+            player?.isMuted = true
         } else {
-            volumeButton.setImage(UIImage(named: volumeLoudImg), for: .normal)
+            player?.isMuted = false
         }
+        
+        playButton.isHidden = true
+        player?.seek(to: .zero)
+        player?.play()
+        // Notification used to restart the video once it ends
+        NotificationCenter.default.addObserver(self, selector: #selector(videoDidFinishPlaying(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+        
+        // Notification used to change video mute state when button is pressed in view controller
+        NotificationCenter.default.addObserver(self, selector: #selector(updateMuteState), name: Notification.Name("MuteStateChanged"), object: nil)
+        
+        progressUpdateTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in
+            self?.updateProgress()
+        }
+    }
+    
+    @objc func updateMuteState(_ notification: Notification) {
+        if let isMuted = notification.userInfo?["isMuted"] as? Bool {
+            player?.isMuted = isMuted
+        }
+    }
+    
+    func pauseVideoPlayback() {
+        player?.pause()
+        playButton.isHidden = false
+        NotificationCenter.default.removeObserver(self)
+        progressUpdateTimer?.invalidate()
+        progressUpdateTimer = nil
+    }
+    
+    @objc func videoDidFinishPlaying(_ notification: Notification) {
+        player?.seek(to: CMTime.zero)
+        player?.play()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+        progressUpdateTimer?.invalidate()
+        progressUpdateTimer = nil
     }
 }
