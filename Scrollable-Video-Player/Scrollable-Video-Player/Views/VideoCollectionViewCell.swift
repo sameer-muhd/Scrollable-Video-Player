@@ -10,7 +10,6 @@ import AVFoundation
 
 // Protocol delegate method used to set global mute/unmute state of cells
 protocol VideoCellDelegate: AnyObject {
-    func didToggleMuteState(for cell: VideoCollectionViewCell)
     func didToggleWatchListState(for cell: VideoCollectionViewCell, videoID: String)
 }
 
@@ -152,6 +151,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     }()
     
     private var videoID: String?
+    weak var watchListDelegate: VideoCellDelegate?
     
     private lazy var addToPlaylistButtonLabel: UILabel = {
         let label = UILabel()
@@ -300,7 +300,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     }
     
     @objc func playListButtonTapped() {
-        globalMuteStateDelegate?.didToggleWatchListState(for: self, videoID: self.videoID!)
+        watchListDelegate?.didToggleWatchListState(for: self, videoID: self.videoID!)
     }
     
     private func addOptionsComponents() {

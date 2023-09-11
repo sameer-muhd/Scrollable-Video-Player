@@ -115,22 +115,6 @@ class ViewController: UIViewController {
         }
     }
     
-    private func fetchDataFromAPI() {
-        networkManager.fetchVideos { [weak self] (assets, error) in
-            if let error = error {
-                print("Error fetching videos: \(error)")
-                return
-            }
-
-            if let assets = assets {
-                DispatchQueue.main.async {
-                    self?.assetDetails = assets
-                    self?.collectionView.reloadData()
-                }
-            }
-        }
-    }
-    
     private func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -205,7 +189,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, VideoCellDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return assetDetails.count
     }
@@ -215,7 +199,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
             return UICollectionViewCell()
         }
         
-        cell.globalMuteStateDelegate = self
+        cell.watchListDelegate = self
         let currentAsset = assetDetails[indexPath.item]
         let videoID = currentAsset.videoDetails.id
         cell.configureVideoPlayer(with: currentAsset, watchListState: isAddedToWatchList(videoID: videoID))
@@ -239,11 +223,6 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
         let itemWidth = collectionView.bounds.width
         let itemHeight = collectionView.bounds.height
         return CGSize(width: itemWidth, height: itemHeight)
-    }
-    
-    func didToggleMuteState(for cell: VideoCollectionViewCell) {
-        // Update global mute state, so that whenever next cells is displayed, they use this mute state
-        isGlobalMute.toggle()
     }
     
     func didToggleWatchListState(for cell: VideoCollectionViewCell, videoID: String) {
