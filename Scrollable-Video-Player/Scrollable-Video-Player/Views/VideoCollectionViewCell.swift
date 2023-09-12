@@ -27,10 +27,10 @@ class VideoCollectionViewCell: UICollectionViewCell {
     private let optionsLabelSize: CGFloat = 12
     private let optionsLabelWeight = UIFont.Weight.medium
 
-    private let titleLabelSize: CGFloat = 14
+    private let titleLabelSize: CGFloat = 18
     private let titleLabelWeight = UIFont.Weight.bold
 
-    private let subtitleLabelSize: CGFloat = 11
+    private let subtitleLabelSize: CGFloat = 14
     private let subtitleLabelWeight = UIFont.Weight.regular
     
     // Constraints declared as constants
@@ -349,9 +349,21 @@ class VideoCollectionViewCell: UICollectionViewCell {
         playButton.isHidden = true
     }
     
-    func configureVideoPlayer(with videoURL: String) {
-        player?.replaceCurrentItem(with: AVPlayerItem(url: URL(string: videoURL)!))
-        player?.pause()
+    func configureVideoPlayer(with asset: Asset) {
+        print("Currently playing: ", asset)
+        let videoURLString = asset.videoDetails.videoUri.avcUri
+        let title = asset.videoDetails.title
+        let description = asset.videoDetails.description
+        
+        titleLabel.text = title
+        subtitleLabel.text = description
+        
+        if let videoURL = URL(string: videoURLString) {
+            player?.replaceCurrentItem(with: AVPlayerItem(url: videoURL))
+            player?.pause()
+        } else {
+            print("Error: Unable to use given URL")
+        }
     }
 
     private func addTextComponents() {
@@ -407,8 +419,10 @@ class VideoCollectionViewCell: UICollectionViewCell {
         // Notification used to change video mute state when button is pressed in view controller
         NotificationCenter.default.addObserver(self, selector: #selector(updateMuteState), name: Notification.Name("MuteStateChanged"), object: nil)
         
-        progressUpdateTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in
-            self?.updateProgress()
+        progressUpdateTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.updateProgress()
+            }
         }
     }
     
