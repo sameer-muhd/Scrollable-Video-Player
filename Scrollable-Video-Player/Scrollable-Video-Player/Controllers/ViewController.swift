@@ -189,7 +189,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, VideoCellDelegate {
+extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return assetDetails.count
     }
@@ -224,7 +224,9 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
         let itemHeight = collectionView.bounds.height
         return CGSize(width: itemWidth, height: itemHeight)
     }
-    
+}
+
+extension ViewController: VideoCellDelegate {
     func didToggleWatchListState(for cell: VideoCollectionViewCell, videoID: String) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
