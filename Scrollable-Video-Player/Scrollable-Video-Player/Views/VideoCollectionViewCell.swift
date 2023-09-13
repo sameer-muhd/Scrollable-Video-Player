@@ -8,6 +8,11 @@
 import UIKit
 import AVFoundation
 
+// Protocol delegate method used to set global mute/unmute state of cells
+protocol VideoCellDelegate: AnyObject {
+    func didToggleWatchListState(for cell: VideoCollectionViewCell, videoID: String)
+}
+
 class VideoCollectionViewCell: UICollectionViewCell {
     // Image assets declared as constants
     private let playButtonImg = "playButton"
@@ -138,12 +143,16 @@ class VideoCollectionViewCell: UICollectionViewCell {
         let addBtn = UIButton(type: .custom)
         
         addBtn.setImage(UIImage(named: addToListImg), for: .normal)
-        addBtn.setImage(UIImage(named: addToListSelectedImg), for: .highlighted)
+        addBtn.setImage(UIImage(named: addToListSelectedImg), for: .selected)
+        addBtn.adjustsImageWhenHighlighted = false
         addBtn.imageView?.contentMode = .scaleToFill
         addBtn.translatesAutoresizingMaskIntoConstraints = false
         
         return addBtn
     }()
+    
+    private var videoID: String?
+    weak var watchListDelegate: VideoCellDelegate?
     
     private lazy var addToPlaylistButtonLabel: UILabel = {
         let label = UILabel()
@@ -230,6 +239,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         addTextComponents()
         
         addPlayerTappedAction()
+        addToPlaylistTappedAction()
     }
     
     private func addBackgroundComponents() {
@@ -284,6 +294,14 @@ class VideoCollectionViewCell: UICollectionViewCell {
                 playButton.isHidden = true
             }
         }
+    }
+    
+    private func addToPlaylistTappedAction() {
+        addToPlaylistButton.addTarget(self, action: #selector(playListButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func playListButtonTapped() {
+        watchListDelegate?.didToggleWatchListState(for: self, videoID: self.videoID!)
     }
     
     private func addOptionsComponents() {
@@ -349,14 +367,16 @@ class VideoCollectionViewCell: UICollectionViewCell {
         playButton.isHidden = true
     }
     
-    func configureVideoPlayer(with asset: Asset) {
+    func configureVideoPlayer(with asset: Asset, watchListState: Bool) {
         print("Currently playing: ", asset)
         let videoURLString = asset.videoDetails.videoUri.avcUri
         let title = asset.videoDetails.title
         let description = asset.videoDetails.description
+        let videoID = asset.videoDetails.id
         
         titleLabel.text = title
         subtitleLabel.text = description
+        self.videoID = videoID
         
         if let videoURL = URL(string: videoURLString) {
             player?.replaceCurrentItem(with: AVPlayerItem(url: videoURL))
@@ -364,6 +384,8 @@ class VideoCollectionViewCell: UICollectionViewCell {
         } else {
             print("Error: Unable to use given URL")
         }
+        
+        updateWatchListButtonState(isVideoAdded: watchListState)
     }
 
     private func addTextComponents() {
@@ -438,6 +460,10 @@ class VideoCollectionViewCell: UICollectionViewCell {
         NotificationCenter.default.removeObserver(self)
         progressUpdateTimer?.invalidate()
         progressUpdateTimer = nil
+    }
+    
+    func updateWatchListButtonState(isVideoAdded: Bool) {
+        addToPlaylistButton.isSelected = isVideoAdded
     }
     
     @objc func videoDidFinishPlaying(_ notification: Notification) {
