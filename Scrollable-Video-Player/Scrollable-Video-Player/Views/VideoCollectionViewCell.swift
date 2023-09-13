@@ -143,6 +143,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
         let addBtn = UIButton(type: .custom)
         
         addBtn.setImage(UIImage(named: addToListImg), for: .normal)
+        addBtn.setImage(UIImage(named: addToListSelectedImg), for: .selected)
         addBtn.adjustsImageWhenHighlighted = false
         addBtn.imageView?.contentMode = .scaleToFill
         addBtn.translatesAutoresizingMaskIntoConstraints = false
@@ -462,11 +463,7 @@ class VideoCollectionViewCell: UICollectionViewCell {
     }
     
     func updateWatchListButtonState(isVideoAdded: Bool) {
-        if isVideoAdded {
-            addToPlaylistButton.setImage(UIImage(named: addToListSelectedImg), for: .normal)
-        } else {
-            addToPlaylistButton.setImage(UIImage(named: addToListImg), for: .normal)
-        }
+        addToPlaylistButton.isSelected = isVideoAdded
     }
     
     @objc func videoDidFinishPlaying(_ notification: Notification) {
